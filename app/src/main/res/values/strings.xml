@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Мастер Рядом</string>
+    <!--DRAWER SETTINGS-->
+    <string name="my_orders">Мои заказы</string>
+    <string name="drawer_settings">Настройки</string>
+    <string name="drawer_news">Новости</string>
+    <string name="drawer_help">Поддержка</string>
+    <string name="drawer_about">О приложении</string>
+    <string name="drawer_guest">Гость</string>
+    <string name="drawer_city_name">Ваш город</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <!--SIGN DIALOG-->
+
+    <string name="sign_in_title">Регистрация</string>
+    <string name="sign_up_title">Вход</string>
+    <string name="find_master_text">Я ищу мастера</string>
+    <string name="master_text">Я ищу работу</string>
+    <string name="main_sign_in_btn_text">Регистрация</string>
+    <string name="my_chip_text">Выбрать</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_password_text">Я не помню пароль</string>
+    <string name="helper_password_text">Минимум 8 символов, должен содержать 1 цифру, одну большую и одну маленькую букву.</string>
+    <string name="alert_dialog_text">На ваш адрес электронной почты отправлено письмо со ссылкой для активации вашего аккаунта. Если письма нет, проверьте папку \'Спам\'.</string>
+    <string name="reset_dialog_text">На ваш адрес электронной почты отправлено письмо со ссылкой для сброса пароля вашего аккаунта. Если письма нет, проверьте папку \'Спам\'.</string>
+    <string name="understand">Понятно</string>
+    <string name="drawer_text">Войдите или зарегистрируйтесь</string>
+    <string name="menu_sign_item">Вход / регистрация</string>
+    <string name="question_sign">Впервые пользуетесь нашим приложением?</string>
+    <string name="have_account_text">У меня уже есть аккаунт</string>
+    <string name="email_password_text">Электронная почта / пароль</string>
+    <string name="with_phone_text">По номеру телефона</string>
+    <string name="sign_in_text">Войти</string>
+
+    <!--NEW MASTER FRAGMENT-->
+    <string name="input_your_data">Введите свои данные</string>
+    <string name="add_photo_text">Загрузить фото</string>
+    <string name="master_profession_text">Ваша профессия</string>
+    <string name="master_name_text">Ваше имя</string>
+    <string name="master_phone_text">Ваш телефон</string>
+    <string name="master_city_text">Ваш город</string>
+    <string name="master_email_text">Ваш E-mail</string>
+    <string name="master_about_text">О себе</string>
+    <string name="save_text">Сохранить</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm_exit">Выйти</string>
+    <string name="dismiss_exit">Остаться</string>
+    <string name="exit_text">Уже уходите?</string>
+    <string name="reset_password_title">Сброс пароля</string>
+    <string name="reset_btn_text">Сброс</string>
+
+</resources>

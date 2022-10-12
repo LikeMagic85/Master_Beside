@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="drawer_padding">20dp</dimen>
+    <dimen name="drawer_padding_bottom">30dp</dimen>
+    <dimen name="drawer_header_height">170dp</dimen>
+    <dimen name="drawer_image_size">96dp</dimen>
+    <dimen name="fragment_padding">20dp</dimen>
+    <dimen name="title_size">28sp</dimen>
+    <dimen name="sign_in_field_margin">20dp</dimen>
+    <dimen name="new_user_input_height">40dp</dimen>
+</resources>

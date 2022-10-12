@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "881364259668",
+    "project_id": "master-beside",
+    "storage_bucket": "master-beside.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881364259668:android:44a821c8b36d7a9714eec1",
+        "android_client_info": {
+          "package_name": "com.likemagic.masters_beside"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881364259668-dp5bjbcv9gqmf0ts2f8gla6g2drqv9h8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt14cSG5skGGEDMQn3-t1CioFIs9u4dsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881364259668-dp5bjbcv9gqmf0ts2f8gla6g2drqv9h8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

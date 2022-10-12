@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:opacity="opaque">
+
+    <item>
+        <shape>
+            <gradient
+                android:endColor="?colorPrimary"
+                android:gradientRadius="500dp"
+                android:startColor="?colorPrimaryVariant"
+                android:type="linear"/>
+        </shape>
+    </item>
+
+    <item
+        android:left="50dp"
+        android:right="50dp">
+        <bitmap
+            android:gravity="fill_horizontal"
+            android:src="@drawable/logo"/>
+    </item>
+
+
+</layer-list>
