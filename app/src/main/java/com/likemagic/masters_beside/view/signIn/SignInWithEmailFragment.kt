@@ -1,7 +1,6 @@
 package com.likemagic.masters_beside.view.signIn
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

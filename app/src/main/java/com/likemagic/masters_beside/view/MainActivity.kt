@@ -1,8 +1,7 @@
 package com.likemagic.masters_beside.view
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -13,7 +12,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -40,12 +43,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         observeLiveData()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == SIGN_IN_WITH_GOOGLE_REQUEST_CODE){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val user = task.getResult(ApiException::class.java)
+                if (user != null){
+                    updateNavMenuWithGoogle(user)
+                    viewModel.signInWithGoogle(user.idToken!!, user)
+                }
+            }catch (e:ApiException){
+
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         if (accountBase.currentUser != null) {
             val sp = getSharedPreferences(PASSWORD, MODE_PRIVATE)
             val password = sp.getString(PASSWORD, "")
             viewModel.signInWithEmail(accountBase.currentUser!!.email!!, password!!)
+        }
+        val user = GoogleSignIn.getLastSignedInAccount(this)
+        if(user != null){
+            viewModel.signInWithGoogle(user.idToken!!, user)
         }
     }
 
@@ -66,6 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 updateNavMenu(false)
                 binding.mainDrawer.closeDrawer(GravityCompat.START)
                 viewModel.signOut()
+                getSignInClient().signOut()
                 Snackbar.make(binding.root, "Выход выполнен", Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -82,6 +106,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else if (it is AppState.Logout) {
                 viewModel.signOut()
                 logOutUser()
+            }else if(it is AppState.SuccessSignInWithGoogle){
+                updateNavMenuWithGoogle(it.user)
+                updateNavMenu(true)
             }
         }
     }
@@ -128,8 +155,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.navView.menu.apply {
             findItem(R.id.actionMyOrders).isVisible = flag
             findItem(R.id.actionSettings).isVisible = flag
+            findItem(R.id.actionHelp).isVisible = flag
             findItem(R.id.actionSign).isVisible = !flag
         }
+    }
+
+    private fun updateNavMenuWithGoogle(user: GoogleSignInAccount) {
+        findViewById<TextView>(R.id.drawerUserText).text = user.displayName
+        findViewById<TextView>(R.id.signOrRegText).visibility = GONE
+        findViewById<ImageView>(R.id.logOut).visibility = VISIBLE
     }
 
     private fun navigateTo(fragment: Fragment, name: String) {
@@ -137,6 +171,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addToBackStack(name)
             .replace(R.id.mainContainer, fragment, name)
             .commit()
+    }
+
+    private fun getSignInClient(): GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(resources.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        return GoogleSignIn.getClient(this, gso)
     }
 
     override fun onBackPressed() {

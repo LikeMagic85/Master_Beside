@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "881364259668-bl7v2nlr9s8gs9ue244mjrqpv6lhmom4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.likemagic.masters_beside",
+            "certificate_hash": "ecb6a44e2b9f128f7c26fd962357e4a56893abbc"
+          }
+        },
+        {
           "client_id": "881364259668-dp5bjbcv9gqmf0ts2f8gla6g2drqv9h8.apps.googleusercontent.com",
           "client_type": 3
         }

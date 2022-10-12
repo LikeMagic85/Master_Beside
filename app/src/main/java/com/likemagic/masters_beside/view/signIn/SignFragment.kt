@@ -1,22 +1,30 @@
 package com.likemagic.masters_beside.view.signIn
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignBinding
 import com.likemagic.masters_beside.utils.SIGN_IN_WITH_EMAIL_FRAGMENT
+import com.likemagic.masters_beside.utils.SIGN_IN_WITH_GOOGLE_REQUEST_CODE
 import com.likemagic.masters_beside.utils.SIGN_UP_FRAGMENT
-import com.likemagic.masters_beside.utils.SIGN_UP_WITH_EMAIL_FRAGMENT
+import com.likemagic.masters_beside.view.MainActivity
 
 class SignFragment : Fragment() {
     private var _binding: FragmentSignBinding? = null
     private val binding: FragmentSignBinding
         get() = _binding!!
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -50,6 +58,10 @@ class SignFragment : Fragment() {
         binding.emailBtn.setOnClickListener {
             navigateTo(SignInWithEmailFragment.newInstance(),SIGN_IN_WITH_EMAIL_FRAGMENT)
         }
+        binding.signWithGoogleBtn.setOnClickListener {
+            signInWithGoogle()
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
     private fun navigateTo(fragment: Fragment, name:String){
@@ -57,6 +69,18 @@ class SignFragment : Fragment() {
             .addToBackStack(SIGN_UP_FRAGMENT)
             .replace(R.id.mainContainer, fragment, name)
             .commit()
+    }
+
+    private fun getSignInClient(): GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(requireActivity().resources.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        return GoogleSignIn.getClient(requireActivity(), gso)
+    }
+
+    private fun signInWithGoogle() {
+        requireActivity().startActivityForResult(getSignInClient().signInIntent, SIGN_IN_WITH_GOOGLE_REQUEST_CODE)
     }
 
     companion object {
