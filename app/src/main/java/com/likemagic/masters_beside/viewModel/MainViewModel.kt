@@ -113,4 +113,8 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun signInWithPhoneAuthCredential(verificationId:String, code:String){
+
+    }
+
 }

@@ -45,15 +45,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == SIGN_IN_WITH_GOOGLE_REQUEST_CODE){
+        if (requestCode == SIGN_IN_WITH_GOOGLE_REQUEST_CODE) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val user = task.getResult(ApiException::class.java)
-                if (user != null){
+                if (user != null) {
                     updateNavMenuWithGoogle(user)
                     viewModel.signInWithGoogle(user.idToken!!, user)
                 }
-            }catch (e:ApiException){
+            } catch (e: ApiException) {
 
             }
         }
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             viewModel.signInWithEmail(accountBase.currentUser!!.email!!, password!!)
         }
         val user = GoogleSignIn.getLastSignedInAccount(this)
-        if(user != null){
+        if (user != null) {
             viewModel.signInWithGoogle(user.idToken!!, user)
         }
     }
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else if (it is AppState.Logout) {
                 viewModel.signOut()
                 logOutUser()
-            }else if(it is AppState.SuccessSignInWithGoogle){
+            } else if (it is AppState.SuccessSignInWithGoogle) {
                 updateNavMenuWithGoogle(it.user)
                 updateNavMenu(true)
             }
@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentByTag(LIST_OF_MASTERS_FRAGMENT)
-        if(fragment!!.isDetached){
+        if (fragment!!.isDetached) {
             navigateTo(ListOfMastersFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT)
         }
         super.onBackPressed()

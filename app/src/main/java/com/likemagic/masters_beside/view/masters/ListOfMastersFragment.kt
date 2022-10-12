@@ -12,7 +12,6 @@ import androidx.transition.TransitionInflater
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ExitDialogBinding
 import com.likemagic.masters_beside.databinding.FragmentListOfMastersBinding
-import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.MainViewModel
 import kotlin.system.exitProcess
 
@@ -49,7 +48,7 @@ class ListOfMastersFragment : Fragment() {
         return binding.root
     }
 
-    private fun detectBackClick(){
+    private fun detectBackClick() {
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
         requireView().setOnKeyListener { _, keyCode, event ->
@@ -60,7 +59,7 @@ class ListOfMastersFragment : Fragment() {
         }
     }
 
-    private fun createExitDialog(){
+    private fun createExitDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val exitBinding = ExitDialogBinding.inflate(requireActivity().layoutInflater)
         builder.setView(exitBinding.root)

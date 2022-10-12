@@ -1,25 +1,23 @@
 package com.likemagic.masters_beside.view.signIn
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignBinding
+import com.likemagic.masters_beside.utils.CHOOSE_FRAGMENT
 import com.likemagic.masters_beside.utils.SIGN_IN_WITH_EMAIL_FRAGMENT
 import com.likemagic.masters_beside.utils.SIGN_IN_WITH_GOOGLE_REQUEST_CODE
-import com.likemagic.masters_beside.utils.SIGN_UP_FRAGMENT
-import com.likemagic.masters_beside.view.MainActivity
+import com.likemagic.masters_beside.utils.SIGN_UP_WITH_EMAIL_FRAGMENT
 
 class SignFragment : Fragment() {
     private var _binding: FragmentSignBinding? = null
@@ -52,21 +50,28 @@ class SignFragment : Fragment() {
     }
 
     private fun setUpBtn() {
-        binding.regBtn.setOnClickListener{
-            navigateTo(SignUpFragment.newInstance(), SIGN_UP_FRAGMENT)
+        binding.regBtn.setOnClickListener {
+            navigateTo(SignUpWithEmailFragment.newInstance(), SIGN_UP_WITH_EMAIL_FRAGMENT)
         }
         binding.emailBtn.setOnClickListener {
-            navigateTo(SignInWithEmailFragment.newInstance(),SIGN_IN_WITH_EMAIL_FRAGMENT)
+            navigateTo(SignInWithEmailFragment.newInstance(), SIGN_IN_WITH_EMAIL_FRAGMENT)
+        }
+        binding.phoneBtn.setOnClickListener {
+            navigateTo(SignUpWithPhoneFragment.newInstance())
         }
         binding.signWithGoogleBtn.setOnClickListener {
+            //FIXME
             signInWithGoogle()
-            requireActivity().supportFragmentManager.popBackStack()
+            val fm = requireActivity().supportFragmentManager
+            fm.popBackStack()
+            navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
         }
     }
 
-    private fun navigateTo(fragment: Fragment, name:String){
+
+    private fun navigateTo(fragment: Fragment, name: String) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .addToBackStack(SIGN_UP_FRAGMENT)
+            .addToBackStack(name)
             .replace(R.id.mainContainer, fragment, name)
             .commit()
     }
@@ -80,7 +85,10 @@ class SignFragment : Fragment() {
     }
 
     private fun signInWithGoogle() {
-        requireActivity().startActivityForResult(getSignInClient().signInIntent, SIGN_IN_WITH_GOOGLE_REQUEST_CODE)
+        requireActivity().startActivityForResult(
+            getSignInClient().signInIntent,
+            SIGN_IN_WITH_GOOGLE_REQUEST_CODE
+        )
     }
 
     companion object {

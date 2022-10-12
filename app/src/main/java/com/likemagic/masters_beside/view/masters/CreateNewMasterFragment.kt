@@ -1,7 +1,6 @@
-package com.likemagic.masters_beside.view.signIn
+package com.likemagic.masters_beside.view.masters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.transition.TransitionInflater
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentCreateNewMasterBinding
-import com.likemagic.masters_beside.utils.*
+import com.likemagic.masters_beside.utils.SIGN_FRAGMENT
 import com.likemagic.masters_beside.viewModel.MainViewModel
 
 class CreateNewMasterFragment : Fragment() {

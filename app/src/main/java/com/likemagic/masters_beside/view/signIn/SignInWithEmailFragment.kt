@@ -19,9 +19,9 @@ import com.likemagic.masters_beside.viewModel.MainViewModel
 
 class SignInWithEmailFragment : Fragment() {
 
-    private var _binding:FragmentSignUpUserBinding? = null
+    private var _binding: FragmentSignUpUserBinding? = null
     private val binding: FragmentSignUpUserBinding
-    get() = _binding!!
+        get() = _binding!!
 
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -47,7 +47,7 @@ class SignInWithEmailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getLiveData().observe(viewLifecycleOwner){
+        viewModel.getLiveData().observe(viewLifecycleOwner) {
             renderSignResult(it)
         }
         signIn()
@@ -69,39 +69,47 @@ class SignInWithEmailFragment : Fragment() {
         }
     }
 
-    private fun signIn(){
-        binding.signInBtn.setOnClickListener{
+    private fun signIn() {
+        binding.signInBtn.setOnClickListener {
             val email = binding.loginEmailInput.text.toString()
             val password = binding.loginPasswordInput.text.toString()
             val sp = requireActivity().getSharedPreferences(PASSWORD, Context.MODE_PRIVATE)
             val editor = sp.edit()
             editor.putString(PASSWORD, password).apply()
-            if(isValidEmail(email)){
-                if(isValidPassword(password)){
+            if (isValidEmail(email)) {
+                if (isValidPassword(password)) {
                     viewModel.signInWithEmail(email, password)
-                }else{
+                } else {
                     binding.loginPassword.error = resources.getString(R.string.helper_password_text)
                 }
-            }else{
-                Snackbar.make(binding.root, "Пожалуйста, введите правильный E-mail", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    "Пожалуйста, введите правильный E-mail",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
             it.hideKeyboard()
         }
     }
 
-    private fun renderSignResult(appState: AppState){
-        if(appState is AppState.SuccessSignIn){
-            when(appState.result){
+    private fun renderSignResult(appState: AppState) {
+        if (appState is AppState.SuccessSignIn) {
+            when (appState.result) {
                 SUCCESSFUL_SIGN -> {
                     Snackbar.make(binding.root, "Вход выполнен", Snackbar.LENGTH_SHORT).show()
                     removeFragment(SIGN_FRAGMENT)
                 }
             }
         }
-        if (appState is AppState.ErrorSignIn){
-            when(appState.result){
+        if (appState is AppState.ErrorSignIn) {
+            when (appState.result) {
                 USER_NOT_FOUND -> {
-                    Snackbar.make(binding.root, "Пользователь с таким E-mail не зарегистрирован", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        "Пользователь с таким E-mail не зарегистрирован",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
                 ERROR_WRONG_PASSWORD -> {
                     Snackbar.make(binding.root, "Неверный пароль", Snackbar.LENGTH_SHORT).show()
@@ -110,7 +118,7 @@ class SignInWithEmailFragment : Fragment() {
         }
     }
 
-    private fun removeFragment(name:String){
+    private fun removeFragment(name: String) {
         val fm = requireActivity().supportFragmentManager
         fm.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }

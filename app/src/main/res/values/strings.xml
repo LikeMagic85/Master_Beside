@@ -51,5 +51,11 @@
     <string name="exit_text">Уже уходите?</string>
     <string name="reset_password_title">Сброс пароля</string>
     <string name="reset_btn_text">Сброс</string>
+    <string name="question_category_text">Что вы хотите найти</string>
+    <string name="next_step_text">Продолжить</string>
+    <string name="phone_hint">Телефон</string>
+    <string name="confirm_code_hint">Код подтверждения</string>
+    <string name="get_confirm_code">Получить код</string>
+    <string name="verify_confirm_code">Проверить код</string>
 
 </resources>

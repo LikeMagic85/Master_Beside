@@ -54,44 +54,6 @@
             android:background="?colorSecondary"
             app:layout_constraintTop_toBottomOf="@id/add_photo_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/professionHelper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/master_profession_text"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/lineMaster"
-            app:layout_constraintTop_toBottomOf="@id/lineMaster" />
-
-        <LinearLayout
-            android:id="@+id/masterProfessionContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@id/professionHelper">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/professionIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_work" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="99">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/masterProfessionInput"
-                    android:layout_width="match_parent"
-                    android:padding="3dp"
-                    android:layout_height="@dimen/new_user_input_height"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/nameHelper"
@@ -102,7 +64,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/masterProfessionContainer" />
+            app:layout_constraintTop_toBottomOf="@id/lineMaster" />
 
         <LinearLayout
             android:id="@+id/masterNameContainer"

@@ -1,6 +1,6 @@
 package com.likemagic.masters_beside.repository
 
-data class City(val name: String, val lat:Double, val lon:Double){
+data class City(val name: String, val lat: Double, val lon: Double) {
     fun getCityList() = listOf(
         City("Минск", 53.9, 27.5667),
         City("Витебск", 55.1904, 30.2049),
