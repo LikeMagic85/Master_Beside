@@ -7,8 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:layout_height="match_parent"
-    android:padding="@dimen/fragment_padding"
-    tools:context=".view.signIn.ChoseCategoryFragment">
+    android:padding="@dimen/fragment_padding">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
@@ -29,26 +28,28 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginEmailInput"
-            android:hint="@string/phone_hint"
+            android:hint="@string/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/sign_in_field_margin"
             android:inputType="textEmailAddress"
             android:layout_marginBottom="@dimen/sign_in_field_margin"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirmCode"
+        android:id="@+id/loginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:helperTextEnabled="true"
+        app:errorEnabled="true"
+        app:helperText=""
+        app:endIconMode="password_toggle"
+        app:layout_constraintTop_toBottomOf="@id/loginEmail">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/codeInput"
-            android:hint="@string/confirm_code_hint"
+            android:id="@+id/loginPasswordInput"
+            android:hint="@string/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
@@ -59,23 +60,24 @@
         android:id="@+id/signInBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/get_confirm_code"
+        android:text="@string/sign_in_title"
         android:layout_marginTop="@dimen/sign_in_field_margin"
-        app:layout_constraintTop_toBottomOf="@id/confirmCode"
+        app:layout_constraintTop_toBottomOf="@id/loginPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/confirmCodeBtn"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/forgetPassword"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/verify_confirm_code"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textColor="@color/blue"
         android:visibility="gone"
+        tools:visibility="visible"
         android:layout_marginTop="@dimen/sign_in_field_margin"
-        app:layout_constraintTop_toBottomOf="@id/confirmCode"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:layout_constraintTop_toBottomOf="@id/signInBtn"
+        android:text="@string/forgot_password_text"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

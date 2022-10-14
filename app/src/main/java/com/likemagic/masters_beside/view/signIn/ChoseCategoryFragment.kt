@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.transition.TransitionInflater
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentChoseCategoryBinding
-import com.likemagic.masters_beside.utils.CREATE_NEW_MASTER_FRAGMENT
-import com.likemagic.masters_beside.utils.CREATE_NEW_USER_FRAGMENT
+import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.CreateNewMasterFragment
 import com.likemagic.masters_beside.view.users.CreateNewUserFragment
 
@@ -53,11 +53,13 @@ class ChoseCategoryFragment : Fragment() {
     private fun setUpUser() {
         binding.regBtn.setOnClickListener {
             if (binding.userChip.isChecked) {
+                removeFragment(CHOOSE_FRAGMENT, requireActivity())
                 navigateToNextStep(
                     CreateNewUserFragment.newInstance(),
                     CREATE_NEW_USER_FRAGMENT
                 )
             } else if (binding.masterChip.isChecked) {
+                removeFragment(CHOOSE_FRAGMENT, requireActivity())
                 navigateToNextStep(
                     CreateNewMasterFragment.newInstance(),
                     CREATE_NEW_MASTER_FRAGMENT
@@ -67,6 +69,7 @@ class ChoseCategoryFragment : Fragment() {
             }
         }
     }
+
 
     private fun navigateToNextStep(fragment: Fragment, name: String) {
         requireActivity().supportFragmentManager

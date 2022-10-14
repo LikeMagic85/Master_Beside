@@ -2,6 +2,7 @@ package com.likemagic.masters_beside.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -20,11 +21,15 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthProvider
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserInfo
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ActivityMainBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.ListOfMastersFragment
 import com.likemagic.masters_beside.view.signIn.SignFragment
+import com.likemagic.masters_beside.view.signIn.SignUpWithPhoneFragment
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.MainViewModel
 
@@ -54,22 +59,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     viewModel.signInWithGoogle(user.idToken!!, user)
                 }
             } catch (e: ApiException) {
-
+                Log.d("@@@", e.message!!)
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        if (accountBase.currentUser != null) {
-            val sp = getSharedPreferences(PASSWORD, MODE_PRIVATE)
-            val password = sp.getString(PASSWORD, "")
-            viewModel.signInWithEmail(accountBase.currentUser!!.email!!, password!!)
-        }
-        val user = GoogleSignIn.getLastSignedInAccount(this)
-        if (user != null) {
-            viewModel.signInWithGoogle(user.idToken!!, user)
-        }
+        checkProvider()
     }
 
     private fun init() {
@@ -109,6 +106,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else if (it is AppState.SuccessSignInWithGoogle) {
                 updateNavMenuWithGoogle(it.user)
                 updateNavMenu(true)
+            } else if(it is AppState.SuccessSignInWithPhone){
+                updateNavMenu(true)
+                updateNavMenuWithPhone(it.user)
             }
         }
     }
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 TODO()
             }
             R.id.actionAbout -> {
-                TODO()
+                navigateTo(AboutFragment.newInstance(), ABOUT_FRAGMENT)
             }
             R.id.actionSign -> {
                 navigateTo(SignFragment.newInstance(), SIGN_FRAGMENT)
@@ -166,6 +166,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         findViewById<ImageView>(R.id.logOut).visibility = VISIBLE
     }
 
+    private fun updateNavMenuWithPhone(user: FirebaseUser) {
+        findViewById<TextView>(R.id.drawerUserText).text = user.phoneNumber
+        findViewById<TextView>(R.id.signOrRegText).visibility = GONE
+        findViewById<ImageView>(R.id.logOut).visibility = VISIBLE
+    }
+
     private fun navigateTo(fragment: Fragment, name: String) {
         supportFragmentManager.beginTransaction()
             .addToBackStack(name)
@@ -181,10 +187,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return GoogleSignIn.getClient(this, gso)
     }
 
+    private fun checkProvider(){
+        val provider = accountBase.currentUser?.getIdToken(false)?.result?.signInProvider
+        if(provider != null){
+            Log.d("@@@", provider)
+            if(provider == PROVIDER_EMAIL){
+                val sp = getSharedPreferences(PASSWORD, MODE_PRIVATE)
+                val password = sp.getString(PASSWORD, "")
+                if(!password.isNullOrEmpty()){
+                    viewModel.signInWithEmail(accountBase.currentUser!!.email!!, password!!)
+                }
+            }else if(provider == PROVIDER_GOOGLE){
+                val user = GoogleSignIn.getLastSignedInAccount(this)
+                if (user != null) {
+                    viewModel.signInWithGoogle(user.idToken!!, user)
+                }
+            }else if (provider == PROVIDER_PHONE){
+                navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_IN_WITH_PHONE_FRAGMENT)
+            }
+        }
+    }
+
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentByTag(LIST_OF_MASTERS_FRAGMENT)
-        if (fragment!!.isDetached) {
-            navigateTo(ListOfMastersFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT)
+        if(fragment != null){
+            if (fragment.isDetached) {
+                navigateTo(ListOfMastersFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT)
+            }
         }
         super.onBackPressed()
     }

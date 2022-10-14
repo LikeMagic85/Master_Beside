@@ -33,7 +33,6 @@ class CreateNewMasterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        removeFragment()
     }
 
     override fun onCreateView(
@@ -48,10 +47,7 @@ class CreateNewMasterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun removeFragment() {
-        val fm = requireActivity().supportFragmentManager
-        fm.popBackStack(SIGN_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    }
+
 
     companion object {
         fun newInstance() = CreateNewMasterFragment()

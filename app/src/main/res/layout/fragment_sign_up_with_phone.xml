@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:layout_height="match_parent"
     android:padding="@dimen/fragment_padding"
     tools:context=".view.signIn.ChoseCategoryFragment">
 
@@ -17,23 +17,35 @@
         android:fontFamily="@font/roboto_black"
         android:text="@string/sign_in_title"
         android:textSize="@dimen/title_size"
-        app:fontFamily="@font/roboto_black"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/send_sms_text"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/loginPhone"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@id/text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginPhoneInput"
-            android:hint="@string/phone_hint"
             android:layout_width="match_parent"
+            android:drawableLeft="@drawable/flag_blr"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/sign_in_field_margin"
+            android:hint="@string/phone_hint"
             android:inputType="textEmailAddress"
-            android:layout_marginBottom="@dimen/sign_in_field_margin"/>
+            android:text="+375" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,16 +53,15 @@
         android:id="@+id/confirmCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@id/text"
+        tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/codeInput"
-            android:hint="@string/confirm_code_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/confirm_code_hint"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -59,23 +70,11 @@
         android:id="@+id/signInBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sign_in_field_margin"
         android:text="@string/get_confirm_code"
-        android:layout_marginTop="@dimen/sign_in_field_margin"
-        app:layout_constraintTop_toBottomOf="@id/confirmCode"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/confirmCodeBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/verify_confirm_code"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/sign_in_field_margin"
-        app:layout_constraintTop_toBottomOf="@id/confirmCode"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:layout_constraintTop_toBottomOf="@id/loginPhone" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

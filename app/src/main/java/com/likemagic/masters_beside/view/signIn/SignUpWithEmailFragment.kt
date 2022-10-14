@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpUserBinding
@@ -90,7 +91,7 @@ class SignUpWithEmailFragment : Fragment() {
                 ALREADY_REGISTER -> {
                     Snackbar.make(
                         binding.root,
-                        "Пользователь с данным E-mail уже зарегистрирован или использует другой метод входа",
+                        "Пользователь с данным E-mail уже зарегистрирован",
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
@@ -107,6 +108,15 @@ class SignUpWithEmailFragment : Fragment() {
                 Snackbar.make(
                     binding.root,
                     "Ошибка отправки письма на вашу почту",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+        if(appState is AppState.SuccessLink){
+            if (appState.result == SUCCESS_LINK){
+                Snackbar.make(
+                    binding.root,
+                    "Вы связались с аккаунтом Google",
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
@@ -131,10 +141,7 @@ class SignUpWithEmailFragment : Fragment() {
         val password = sp.getString(PASSWORD, "")
         alertBinding.alertBtn.setOnClickListener {
             viewModel.signInWithEmail(binding.loginEmailInput.text.toString(), password!!)
-            requireActivity().supportFragmentManager.popBackStack(
-                SIGN_FRAGMENT,
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
+            removeFragment(SIGN_UP_WITH_EMAIL_FRAGMENT, requireActivity())
             navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
             dialog.dismiss()
         }

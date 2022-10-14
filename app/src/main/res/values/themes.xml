@@ -3,7 +3,7 @@
     <style name="Theme.МастерРядом" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#0027FF</item>
-        <item name="colorPrimaryVariant">#4B5BB1</item>
+        <item name="colorPrimaryVariant">#4CC66F</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#000000</item>

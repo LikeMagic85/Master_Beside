@@ -30,7 +30,7 @@
     <string name="menu_sign_item">Вход / регистрация</string>
     <string name="question_sign">Впервые пользуетесь нашим приложением?</string>
     <string name="have_account_text">У меня уже есть аккаунт</string>
-    <string name="email_password_text">Электронная почта / пароль</string>
+    <string name="email_password_text">Электронная почта</string>
     <string name="with_phone_text">По номеру телефона</string>
     <string name="sign_in_text">Войти</string>
 
@@ -57,5 +57,11 @@
     <string name="confirm_code_hint">Код подтверждения</string>
     <string name="get_confirm_code">Получить код</string>
     <string name="verify_confirm_code">Проверить код</string>
+    <string name="send_sms_text">На указанный номер телефона будет отправлена SMS с кодом подтверждения</string>
+    <string name="about_text">О приложении</string>
+    <string name="footerAbout">© Мастер рядом 1.00 2022</string>
+    <string name="licenseAbout">Лицензии</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="terms_of_use">Условия использования</string>
 
 </resources>
