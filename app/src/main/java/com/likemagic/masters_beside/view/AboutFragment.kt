@@ -1,22 +1,22 @@
 package com.likemagic.masters_beside.view
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.view.KeyEvent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
 import com.likemagic.masters_beside.R
-import com.likemagic.masters_beside.databinding.ExitDialogBinding
 import com.likemagic.masters_beside.databinding.FragmentAboutBinding
-import com.likemagic.masters_beside.databinding.FragmentListOfMastersBinding
+import com.likemagic.masters_beside.repository.City
 import com.likemagic.masters_beside.utils.ABOUT_FRAGMENT
 import com.likemagic.masters_beside.utils.removeFragment
-import com.likemagic.masters_beside.viewModel.MainViewModel
-import kotlin.system.exitProcess
+import com.likemagic.masters_beside.utils.setToolbarVisibility
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
+import java.io.InputStream
 
 class AboutFragment : Fragment() {
 
@@ -49,6 +49,7 @@ class AboutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpButtons()
+        setToolbarVisibility(requireActivity(), false)
     }
 
     private fun setUpButtons(){
@@ -57,7 +58,7 @@ class AboutFragment : Fragment() {
                 removeFragment(ABOUT_FRAGMENT, requireActivity())
             }
             termsOfUse.setOnClickListener {
-                TODO()
+
             }
             privacyPolicy.setOnClickListener {
                 TODO()

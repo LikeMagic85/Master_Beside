@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
+    android:elevation="2dp"
     android:focusable="true"
     android:padding="@dimen/fragment_padding"
     tools:context=".view.signIn.ChoseCategoryFragment">
@@ -25,10 +26,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_black"
-        app:fontFamily="@font/roboto_black"
         android:gravity="center"
         android:text="@string/question_category_text"
         android:textSize="@dimen/title_size"
+        app:fontFamily="@font/roboto_black"
         app:layout_constraintBottom_toTopOf="@id/profession"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,24 +82,25 @@
         </LinearLayout>
 
         <com.google.android.material.chip.ChipGroup
-            app:singleSelection="true"
             android:layout_width="wrap_content"
-            android:layout_marginBottom="50dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:selectionRequired="true"
+            android:layout_marginBottom="50dp"
             app:chipSpacingHorizontal="40dp"
-            android:layout_height="wrap_content">
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/userChip"
                 android:layout_width="wrap_content"
-                android:text="@string/my_chip_text"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/my_chip_text" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/masterChip"
                 android:layout_width="wrap_content"
-                android:text="@string/my_chip_text"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/my_chip_text" />
 
         </com.google.android.material.chip.ChipGroup>
 

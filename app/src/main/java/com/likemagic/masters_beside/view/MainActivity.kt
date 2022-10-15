@@ -21,23 +21,22 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthProvider
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserInfo
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ActivityMainBinding
 import com.likemagic.masters_beside.utils.*
+import com.likemagic.masters_beside.view.masters.CreateNewMasterFragment
 import com.likemagic.masters_beside.view.masters.ListOfMastersFragment
 import com.likemagic.masters_beside.view.signIn.SignFragment
 import com.likemagic.masters_beside.view.signIn.SignUpWithPhoneFragment
 import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
     private val accountBase = FirebaseAuth.getInstance()
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: SignViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +78,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mainDrawer.addDrawerListener(toggle)
             navView.setNavigationItemSelectedListener(this@MainActivity)
         }
-        toggle.syncState()
         val header = binding.navView.getHeaderView(0)
         header.apply {
             findViewById<ImageView>(R.id.logOut).setOnClickListener {
@@ -90,7 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Snackbar.make(binding.root, "Выход выполнен", Snackbar.LENGTH_SHORT).show()
             }
         }
-        navigateTo(ListOfMastersFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT)
+        navigateTo(CreateNewMasterFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT)
     }
 
     private fun observeLiveData() {
@@ -190,7 +188,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun checkProvider(){
         val provider = accountBase.currentUser?.getIdToken(false)?.result?.signInProvider
         if(provider != null){
-            Log.d("@@@", provider)
             if(provider == PROVIDER_EMAIL){
                 val sp = getSharedPreferences(PASSWORD, MODE_PRIVATE)
                 val password = sp.getString(PASSWORD, "")
@@ -203,7 +200,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     viewModel.signInWithGoogle(user.idToken!!, user)
                 }
             }else if (provider == PROVIDER_PHONE){
-                navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_IN_WITH_PHONE_FRAGMENT)
+
             }
         }
     }
@@ -211,7 +208,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentByTag(LIST_OF_MASTERS_FRAGMENT)
         if(fragment != null){
-            if (fragment.isDetached) {
+            if (fragment.isVisible) {
                 navigateTo(ListOfMastersFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT)
             }
         }

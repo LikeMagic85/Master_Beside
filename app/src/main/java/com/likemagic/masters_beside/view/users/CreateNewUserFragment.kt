@@ -9,7 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.transition.TransitionInflater
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentCreateNewUserBinding
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.utils.setToolbarVisibility
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class CreateNewUserFragment : Fragment() {
 
@@ -17,8 +18,8 @@ class CreateNewUserFragment : Fragment() {
     private val binding: FragmentCreateNewUserBinding
         get() = _binding!!
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
+    private val viewModel: SignViewModel by lazy {
+        ViewModelProvider(this)[SignViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class CreateNewUserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
     }
 
 

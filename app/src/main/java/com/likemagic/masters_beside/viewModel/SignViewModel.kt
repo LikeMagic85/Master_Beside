@@ -11,7 +11,7 @@ import com.likemagic.masters_beside.repository.SignInWithPhone
 import com.likemagic.masters_beside.utils.*
 
 
-class MainViewModel() : ViewModel() {
+class SignViewModel : ViewModel() {
     private val liveData: MutableLiveData<AppState> by lazy { MutableLiveData<AppState>() }
     private val accountBase = FirebaseAuth.getInstance()
     private val signInWithPhone: SignInWithPhone = SignInWithPhone(accountBase)
@@ -147,6 +147,10 @@ class MainViewModel() : ViewModel() {
                 Log.d("@@@", it.exception.toString())
             }
         }
+    }
+
+    fun createNewMaster(){
+
     }
 
 }

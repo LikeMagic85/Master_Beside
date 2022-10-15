@@ -5,26 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class SignFragment : Fragment() {
     private var _binding: FragmentSignBinding? = null
     private val binding: FragmentSignBinding
         get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SignViewModel by activityViewModels()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -48,6 +44,7 @@ class SignFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
         viewModel.getLiveData().observe(viewLifecycleOwner){
             renderResult(it)
         }

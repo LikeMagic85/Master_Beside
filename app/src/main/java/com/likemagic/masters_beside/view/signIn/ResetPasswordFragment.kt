@@ -17,8 +17,9 @@ import com.likemagic.masters_beside.databinding.ResetDialogBinding
 import com.likemagic.masters_beside.utils.SIGN_FRAGMENT
 import com.likemagic.masters_beside.utils.USER_NOT_FOUND
 import com.likemagic.masters_beside.utils.hideKeyboard
+import com.likemagic.masters_beside.utils.setToolbarVisibility
 import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class ResetPasswordFragment : Fragment() {
 
@@ -26,7 +27,7 @@ class ResetPasswordFragment : Fragment() {
     private val binding: FragmentResetPasswordBinding
         get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SignViewModel by activityViewModels()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -50,6 +51,7 @@ class ResetPasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             renderResult(it)
         }

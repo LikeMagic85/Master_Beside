@@ -26,7 +26,7 @@
     </style>
     <style name="MyMaterialButtons" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">?colorPrimaryVariant</item>
-        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">?colorSecondary</item>
     </style>
     <style name="MyChipStyle" parent="Widget.MaterialComponents.Chip.Choice">

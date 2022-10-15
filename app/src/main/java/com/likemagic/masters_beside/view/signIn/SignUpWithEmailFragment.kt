@@ -9,17 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpUserBinding
 import com.likemagic.masters_beside.databinding.SignDialogBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class SignUpWithEmailFragment : Fragment() {
 
@@ -27,7 +25,7 @@ class SignUpWithEmailFragment : Fragment() {
     private val binding: FragmentSignUpUserBinding
         get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SignViewModel by activityViewModels()
 
     lateinit var sp: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
@@ -54,6 +52,7 @@ class SignUpWithEmailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             renderSignResult(it)
         }

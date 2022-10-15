@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.likemagic.masters_beside.R
 
 const val USER_CATEGORY = "user category"
 const val GUEST = 1
@@ -64,4 +65,14 @@ fun isValidPassword(password: String?) : Boolean {
 
 fun removeFragment(name:String, activity: FragmentActivity){
     activity.supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+}
+
+fun setToolbarVisibility(activity: FragmentActivity, flag:Boolean){
+    if(flag){
+        activity.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar).visibility =
+            View.VISIBLE
+    }else{
+        activity.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar).visibility =
+            View.GONE
+    }
 }

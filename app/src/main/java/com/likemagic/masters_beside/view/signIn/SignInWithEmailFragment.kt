@@ -15,7 +15,7 @@ import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpUserBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class SignInWithEmailFragment : Fragment() {
 
@@ -23,7 +23,7 @@ class SignInWithEmailFragment : Fragment() {
     private val binding: FragmentSignUpUserBinding
         get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SignViewModel by activityViewModels()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -47,6 +47,7 @@ class SignInWithEmailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             renderSignResult(it)
         }

@@ -37,15 +37,13 @@
     <!--NEW MASTER FRAGMENT-->
     <string name="input_your_data">Введите свои данные</string>
     <string name="add_photo_text">Загрузить фото</string>
-    <string name="master_profession_text">Ваша профессия</string>
-    <string name="master_name_text">Ваше имя</string>
+    <string name="master_profession_text">Ваша профессия *</string>
+    <string name="master_name_text">Ваше имя *</string>
     <string name="master_phone_text">Ваш телефон</string>
-    <string name="master_city_text">Ваш город</string>
+    <string name="master_city_text">Ваш город *</string>
     <string name="master_email_text">Ваш E-mail</string>
     <string name="master_about_text">О себе</string>
     <string name="save_text">Сохранить</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="confirm_exit">Выйти</string>
     <string name="dismiss_exit">Остаться</string>
     <string name="exit_text">Уже уходите?</string>
@@ -63,5 +61,8 @@
     <string name="licenseAbout">Лицензии</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="terms_of_use">Условия использования</string>
+    <string name="review_text">Отзывов</string>
+    <string name="service_or_master_text"><font size="35">Услуга или специалист</font></string>
+    <string name="no_empty">Поле не может быть пустым</string>
 
 </resources>

@@ -16,7 +16,7 @@ import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpWithPhoneBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MainViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 class SignUpWithPhoneFragment : Fragment() {
 
@@ -24,7 +24,7 @@ class SignUpWithPhoneFragment : Fragment() {
     private val binding: FragmentSignUpWithPhoneBinding
         get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SignViewModel by activityViewModels()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -33,6 +33,7 @@ class SignUpWithPhoneFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fade_transition)
         exitTransition = inflater.inflateTransition(R.transition.fade_transition)
@@ -48,6 +49,7 @@ class SignUpWithPhoneFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolbarVisibility(requireActivity(), false)
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             renderSignResult(it)
         }
@@ -64,6 +66,7 @@ class SignUpWithPhoneFragment : Fragment() {
                 signInBtn.visibility = GONE
                 loginPhone.visibility = GONE
                 confirmCode.visibility = VISIBLE
+                text.visibility = GONE
                 title.apply {
                     text = "Введите код подтверждения"
                     textSize = 22f
@@ -84,10 +87,10 @@ class SignUpWithPhoneFragment : Fragment() {
     private fun renderSignResult(appState: AppState) {
         if(appState is AppState.SuccessSignInWithPhone){
             if(appState.isNew){
-                removeFragment(SIGN_IN_WITH_PHONE_FRAGMENT, requireActivity())
+                removeFragment(SIGN_FRAGMENT, requireActivity())
                 navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
             }else{
-                removeFragment(SIGN_IN_WITH_PHONE_FRAGMENT, requireActivity())
+                removeFragment(SIGN_FRAGMENT, requireActivity())
             }
         } else if (appState is AppState.ErrorVerificationCode){
             Snackbar.make(binding.root, "Неверный код из СМС", Snackbar.LENGTH_SHORT).show()
