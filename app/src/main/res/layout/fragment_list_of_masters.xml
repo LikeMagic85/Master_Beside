@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,11 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:background="@android:color/white"
-        android:stateListAnimator="@animator/search_animation">
+        android:stateListAnimator="@animator/search_animation"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/masterSearch"
             android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             app:endIconDrawable="@drawable/ic_search"
             app:endIconMode="custom">
@@ -27,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:hint="@string/service_or_master_text"
+                android:inputType="textCapSentences"
                 android:padding="3dp"
                 android:singleLine="true"
                 android:textSize="14sp" />
@@ -42,4 +45,39 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_list_master" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/searchContainer"
+        tools:listitem="@layout/item_list_search"
+        />
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-20dp"
+        android:layout_marginEnd="-20dp"
+        android:background="@color/loading_layout_background_color"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?colorPrimaryVariant"
+            app:indicatorSize="50dp"
+            app:trackColor="?colorPrimary"
+            app:trackThickness="6dp" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

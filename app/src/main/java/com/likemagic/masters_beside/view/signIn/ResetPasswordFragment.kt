@@ -5,6 +5,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -60,9 +62,11 @@ class ResetPasswordFragment : Fragment() {
 
     private fun renderResult(appState: AppState?) {
         if (appState is AppState.SuccessReset) {
-            createSignDialog()
+            binding.loadingLayout.visibility = GONE
+            createResetEmailDialog()
         }
         if (appState is AppState.ErrorSignIn) {
+            binding.loadingLayout.visibility = GONE
             if (appState.result == USER_NOT_FOUND) {
                 Snackbar.make(
                     binding.root,
@@ -70,6 +74,9 @@ class ResetPasswordFragment : Fragment() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+        if (appState is AppState.Loading){
+            binding.loadingLayout.visibility = VISIBLE
         }
     }
 
@@ -81,7 +88,7 @@ class ResetPasswordFragment : Fragment() {
         }
     }
 
-    private fun createSignDialog() {
+    private fun createResetEmailDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val alertBinding = ResetDialogBinding.inflate(requireActivity().layoutInflater)
         builder.setView(alertBinding.root)

@@ -3,6 +3,8 @@ package com.likemagic.masters_beside.view.signIn
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -44,6 +46,7 @@ class SignFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.loadingLayout.visibility = GONE
         setToolbarVisibility(requireActivity(), false)
         viewModel.getLiveData().observe(viewLifecycleOwner){
             renderResult(it)
@@ -62,7 +65,7 @@ class SignFragment : Fragment() {
             navigateTo(SignInWithEmailFragment.newInstance(), SIGN_IN_WITH_EMAIL_FRAGMENT)
         }
         binding.phoneBtn.setOnClickListener {
-            navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_IN_WITH_PHONE_FRAGMENT)
+            navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_UP_WITH_PHONE_FRAGMENT)
         }
         binding.signWithGoogleBtn.setOnClickListener {
             signInWithGoogle()
@@ -71,12 +74,17 @@ class SignFragment : Fragment() {
 
     private fun renderResult(appState: AppState) {
         if(appState is AppState.SuccessSignInWithGoogle){
+            binding.loadingLayout.visibility = GONE
             if(appState.isNew){
                 removeFragment(SIGN_FRAGMENT, requireActivity())
                 navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
             }else{
                 removeFragment(SIGN_FRAGMENT, requireActivity())
             }
+        }else if(appState is AppState.Loading){
+            binding.loadingLayout.visibility = VISIBLE
+        }else if (appState is AppState.ErrorSignIn){
+            binding.loadingLayout.visibility = GONE
         }
     }
 

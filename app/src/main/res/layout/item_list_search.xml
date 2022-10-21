@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    app:strokeWidth="1px"
+    app:strokeColor="@color/black"
+    android:backgroundTint="#E4FFFFFF"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/searchChoose"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/new_user_input_height"
+        android:gravity="center_vertical"
+        android:inputType="textCapSentences"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Строитель" />
+
+</com.google.android.material.card.MaterialCardView>

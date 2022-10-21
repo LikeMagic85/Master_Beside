@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemMasterContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="15dp"
+    android:elevation="5dp"
+    android:translationZ="20dp"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/reviewOwnerPhoto"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="10dp"
+                app:civ_border_color="@color/my_gray"
+                app:civ_border_width="2dp"
+                android:src="@drawable/ic_account" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/masterNameListItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    tools:text="Master name"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/roboto_black" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@drawable/ic_star" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@drawable/ic_star" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@drawable/ic_star" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@drawable/ic_star" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@drawable/ic_star" />
+                </LinearLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/reviewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="30dp"
+            tools:text="jdjfhgbjdhfbjhv jdhfbjdhbjdhvb"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemMasterContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="15dp"
     android:elevation="5dp"
     android:translationZ="20dp"
@@ -24,7 +25,8 @@
                 android:id="@+id/masterPhotoListItem"
                 android:layout_width="@dimen/drawer_image_size"
                 android:layout_height="@dimen/drawer_image_size"
-                app:civ_border_color="#B5787878"
+                android:layout_margin="10dp"
+                app:civ_border_color="@color/my_gray"
                 app:civ_border_width="2dp"
                 android:src="@drawable/ic_account" />
 
@@ -38,8 +40,8 @@
                     android:id="@+id/masterNameListItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_black"
-                    android:text="Master name"
+                    android:fontFamily="@font/roboto_bold"
+                    tools:text="Master name"
                     android:textSize="20sp"
                     app:fontFamily="@font/roboto_black" />
 
@@ -47,7 +49,7 @@
                     android:id="@+id/onlineListItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="на сайте 2 дня назад" />
+                    tools:text="на сайте 2 дня назад" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -89,13 +91,6 @@
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_reviews" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/countReviewsListItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:textSize="16sp"
-                android:text="15" />
 
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -103,6 +98,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/review_text"
                 android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/countReviewsListItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="16sp"
+                android:text="15" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -124,6 +127,16 @@
                 android:id="@+id/cityItemList"
                 android:layout_width="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content"
+                app:fontFamily="@font/roboto_bold"
+                tools:text="@string/master_city_text"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/professionItemList"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@id/cityItemList"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_height="wrap_content"
                 android:text="@string/master_city_text"/>

@@ -7,7 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.*
+import com.likemagic.masters_beside.database.DBManager
+import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.repository.SignInWithPhone
+import com.likemagic.masters_beside.repository.User
 import com.likemagic.masters_beside.utils.*
 
 
@@ -15,6 +18,7 @@ class SignViewModel : ViewModel() {
     private val liveData: MutableLiveData<AppState> by lazy { MutableLiveData<AppState>() }
     private val accountBase = FirebaseAuth.getInstance()
     private val signInWithPhone: SignInWithPhone = SignInWithPhone(accountBase)
+    private val dataBase = DBManager()
 
     fun getLiveData(): LiveData<AppState> {
         return liveData
@@ -39,8 +43,9 @@ class SignViewModel : ViewModel() {
         }
     }
 
-    private fun sendVerificationEmail(user: FirebaseUser) {
+    fun sendVerificationEmail(user: FirebaseUser) {
         user.sendEmailVerification().addOnCompleteListener {
+            liveData.postValue(AppState.Loading)
             if (it.isSuccessful) {
                 liveData.postValue(AppState.SuccessPostEmail(true, user.email!!))
             } else if (it.isCanceled) {
@@ -80,6 +85,7 @@ class SignViewModel : ViewModel() {
     }
 
     fun resetPassword(email: String) {
+        liveData.postValue(AppState.Loading)
         accountBase.sendPasswordResetEmail(email).addOnCompleteListener {
             if (it.isSuccessful) {
                 liveData.postValue(AppState.SuccessReset)
@@ -93,6 +99,7 @@ class SignViewModel : ViewModel() {
     }
 
     fun signInWithGoogle(token: String, user: GoogleSignInAccount) {
+        liveData.postValue(AppState.Loading)
         val credential = GoogleAuthProvider.getCredential(token, null)
         accountBase.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
@@ -118,13 +125,15 @@ class SignViewModel : ViewModel() {
     }
 
     fun signInWithPhoneAuthCredential(code:String) {
+        liveData.postValue(AppState.Loading)
         val credential = PhoneAuthProvider.getCredential(signInWithPhone.id, code)
         accountBase.signInWithCredential(credential)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     val isNew = it.result.additionalUserInfo?.isNewUser
-                    liveData.postValue(AppState.SuccessSignInWithPhone(it.result.user!!, isNew!!))
-                } else {
+                    val hasEmail = !it.result.user!!.email.isNullOrEmpty()
+                    liveData.postValue(AppState.SuccessSignInWithPhone(it.result.user!!, isNew!!, hasEmail))
+                }else {
                     val exception = it.exception as FirebaseAuthException
                     Log.d("@@@", exception.errorCode)
                     if (it.exception is FirebaseAuthInvalidCredentialsException) {
@@ -139,18 +148,42 @@ class SignViewModel : ViewModel() {
     }
 
     fun linkPhoneWithEmail(email: String, password: String){
+        liveData.postValue(AppState.Loading)
         val credential = EmailAuthProvider.getCredential(email, password)
         accountBase.currentUser?.linkWithCredential(credential)?.addOnCompleteListener {
             if (it.isSuccessful) {
                 liveData.postValue(AppState.SuccessLink(SUCCESS_LINK))
-            } else {
+            }  else if (it.exception is FirebaseAuthUserCollisionException) {
+                val exception = it.exception as FirebaseAuthUserCollisionException
+                if (exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE") {
+                    liveData.postValue(AppState.ErrorSignIn(ALREADY_REGISTER))
+                    linkGoogleToEmail(email, password)
+                }
+            }else {
                 Log.d("@@@", it.exception.toString())
             }
         }
     }
 
-    fun createNewMaster(){
+    fun createNewMaster(master: Master){
+        val uid = accountBase.currentUser?.uid!!
+        master.uid = uid
+        master.key = dataBase.masterBranch.push().key!!
+        dataBase.addMaster(master){
+            liveData.postValue(AppState.NewMaster(master))
+        }
 
+    }
+
+    fun uploadImage(byteArray: ByteArray, master: Master?, user: User?){
+        val storageRef = DBManager().storage.child(DBManager().auth.uid!!).child("image${accountBase.uid}")
+        val upTask = storageRef.putBytes(byteArray)
+        upTask.continueWithTask {
+            storageRef.downloadUrl
+        }.addOnCompleteListener{
+            master?.uriImage = it.result.toString()
+            liveData.postValue(AppState.UploadImage(master))
+        }
     }
 
 }

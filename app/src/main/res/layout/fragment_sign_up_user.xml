@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
-    android:elevation="2dp"
     android:focusable="true"
     android:padding="@dimen/fragment_padding">
 
@@ -79,6 +78,31 @@
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/signInBtn"
         tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-20dp"
+        android:layout_marginEnd="-20dp"
+        android:background="@color/loading_layout_background_color"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?colorPrimaryVariant"
+            app:indicatorSize="50dp"
+            app:trackColor="?colorPrimary"
+            app:trackThickness="6dp" />
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

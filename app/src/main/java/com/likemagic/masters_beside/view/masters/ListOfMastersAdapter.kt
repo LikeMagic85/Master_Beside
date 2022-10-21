@@ -4,19 +4,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.likemagic.masters_beside.databinding.ItemListMasterBinding
 import com.likemagic.masters_beside.repository.Master
 
 class ListOfMastersAdapter(private var list: List<Master> = listOf()): RecyclerView.Adapter<ListOfMastersAdapter.MasterViewHolder>(){
 
+    var onItemClick: ((Master) -> Unit)? = null
+
     fun setList(newList: List<Master>) {
         this.list = newList
+        notifyDataSetChanged()
     }
 
     inner class MasterViewHolder(view: View):RecyclerView.ViewHolder(view) {
+        val binding = ItemListMasterBinding.bind(itemView)
         fun myBind(master: Master) {
-            ItemListMasterBinding.bind(itemView).apply {
+            binding.apply {
                 masterNameListItem.text = master.name
+                cityItemList.text = master.city.name
+                professionItemList.text = master.profession.name
+                if(!master.uriImage.isNullOrEmpty()){
+                    masterPhotoListItem.load(master.uriImage)
+                }
+                countReviewsListItem.text = master.reviews.size.toString()
+                gradleListItem.text = master.rating.toString()
             }
         }
     }
@@ -27,7 +39,12 @@ class ListOfMastersAdapter(private var list: List<Master> = listOf()): RecyclerV
     }
 
     override fun onBindViewHolder(holder: MasterViewHolder, position: Int) {
-        holder.myBind(list[position])
+        holder.apply {
+            myBind(list[position])
+            binding.itemMasterContainer.setOnClickListener {
+                onItemClick!!.invoke(list[position])
+            }
+        }
     }
 
     override fun getItemCount() = list.size

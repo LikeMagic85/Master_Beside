@@ -4,10 +4,10 @@ import android.util.Log
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
-import com.likemagic.masters_beside.R
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+import com.likemagic.masters_beside.R
 import java.util.concurrent.TimeUnit
 
 class SignInWithPhone(private val accountBase: FirebaseAuth, var id:String ="") {

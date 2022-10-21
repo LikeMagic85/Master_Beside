@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/fragment_padding">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImage"
+        android:layout_width="@dimen/drawer_image_size"
+        android:layout_height="@dimen/drawer_image_size"
+        android:src="@drawable/ic_account"
+        app:civ_border_color="@color/my_gray"
+        app:civ_border_width="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatCheckedTextView
+        android:id="@+id/changePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/change_photo_text"
+        android:visibility="gone"
+        android:textColor="@color/blue"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileImage" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/deleteAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Дмитрий Маслюкевич" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/profileProfession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toBottomOf="@id/profileName"
+        tools:text="Программист" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ratingContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toBottomOf="@id/profileProfession">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/gradleProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="4.8" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_star"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="1px" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_reviews" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/countReviewsProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textSize="16sp"
+            tools:text="15" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_text"
+            android:textSize="16sp" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="5dp"
+        android:background="@color/my_gray"
+        app:layout_constraintTop_toBottomOf="@id/changePhoto"
+        app:layout_goneMarginTop="10dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mainInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/main_information"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/line" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mainInfAgeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="возраст - "
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainInformation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mainInfAgeNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/mainInfAgeText"
+        app:layout_constraintTop_toBottomOf="@id/mainInformation"
+        tools:text="37" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mainInfCityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fontFamily="@font/roboto_bold"
+        android:textSize="14sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toEndOf="@id/mainInfAgeNum"
+        app:layout_constraintTop_toBottomOf="@id/mainInformation"
+        tools:text="Minsk" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/editProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainInformation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/experienceTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/experience_title"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/mainInfCityText" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/experience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:elevation="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/experienceTitle"
+        tools:text="10 years" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/contactsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/contacts_title_text"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/experience" />
+
+    <include
+        android:id="@+id/contactsContainer"
+        layout="@layout/contacts_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/contactsTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/aboutTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/about_me_text"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/contactsContainer" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/aboutText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/aboutTitle"
+        tools:text="Very dfgdfgg dfgdfg dfgdgr xcvrddged drgdg ertfref erert ertet xvxtttdg rhftgfgt" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/costTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/cost_title_text"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/aboutText" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/costText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="от 200 BYN"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/costTitle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sendMessageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/send_message_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/costText" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/reviewsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/review_text"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/sendMessageBtn" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviewsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/reviewsTitle"
+        tools:layout_editor_absoluteX="1dp"
+        tools:listitem="@layout/item_list_reviews" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="5dp"
+        android:background="@color/my_gray"
+        app:layout_constraintTop_toBottomOf="@id/aboutText"
+        app:layout_goneMarginTop="10dp" />
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-20dp"
+        android:layout_marginEnd="-20dp"
+        android:background="@color/loading_layout_background_color"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?colorPrimaryVariant"
+            app:indicatorSize="50dp"
+            app:trackColor="?colorPrimary"
+            app:trackThickness="6dp" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

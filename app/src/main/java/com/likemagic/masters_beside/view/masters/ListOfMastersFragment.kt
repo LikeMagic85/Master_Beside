@@ -3,23 +3,28 @@ package com.likemagic.masters_beside.view.masters
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ExitDialogBinding
 import com.likemagic.masters_beside.databinding.FragmentListOfMastersBinding
-import com.likemagic.masters_beside.repository.City
-import com.likemagic.masters_beside.repository.Contact
 import com.likemagic.masters_beside.repository.Master
-import com.likemagic.masters_beside.repository.Profession
+import com.likemagic.masters_beside.repository.ProfessionGetter
+import com.likemagic.masters_beside.utils.PROFILE_FRAGMENT
+import com.likemagic.masters_beside.utils.hideKeyboard
 import com.likemagic.masters_beside.utils.setToolbarVisibility
+import com.likemagic.masters_beside.view.navigation.ProfileFragment
+import com.likemagic.masters_beside.viewModel.AppState
+import com.likemagic.masters_beside.viewModel.MastersViewModel
 import com.likemagic.masters_beside.viewModel.SignViewModel
 import kotlin.system.exitProcess
 
@@ -29,7 +34,11 @@ class ListOfMastersFragment : Fragment() {
     private val binding: FragmentListOfMastersBinding
         get() = _binding!!
 
-    private val viewModel: SignViewModel by activityViewModels()
+    private val signViewModel: SignViewModel by activityViewModels()
+    private val mastersViewModel: MastersViewModel by viewModels()
+    private val masterAdapter = ListOfMastersAdapter()
+    private val searchAdapter = ListOfSearchAdapter()
+    private var listOfMasters = listOf<Master>()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -59,33 +68,67 @@ class ListOfMastersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolbarVisibility(requireActivity(), true)
-        initRecycler()
+        signViewModel.getLiveData().observe(viewLifecycleOwner){
+            renderData(it)
+        }
+        mastersViewModel.getLiveData().observe(viewLifecycleOwner){
+            renderData(it)
+        }
+        mastersViewModel.getAllMasters()
+        initRecycler(masterAdapter)
         setUpSearch()
+        initSearchRecycler(searchAdapter)
     }
 
-    private fun initRecycler(){
-        val mastersList = listOf(
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
-            Master(Profession("", listOf("","")), City("",0.0,0.0),"Дмитрий","","", Contact("","","",""),0f,0),
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = VISIBLE
+            }
+            is AppState.ListOfMasters -> {
+                binding.loadingLayout.visibility = GONE
+                masterAdapter.setList(appState.list)
+                listOfMasters = appState.list
+            }
+            else -> {}
+        }
+    }
 
-        )
-        val masterAdapter = ListOfMastersAdapter()
-        masterAdapter.setList(mastersList)
+    private fun initRecycler(masterAdapter: ListOfMastersAdapter){
         binding.masterList.adapter = masterAdapter
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             binding.masterList.setOnScrollChangeListener { _, _, _, _, _ ->
                 binding.searchContainer.isSelected = binding.masterList.canScrollVertically(-1)
+            }
+        }
+        masterAdapter.onItemClick ={
+            navigateToMasterPage(it.uid!!)
+        }
+    }
+
+
+    private fun initSearchRecycler(
+        searchAdapter: ListOfSearchAdapter
+    ) {
+        binding.searchRecycler.adapter = searchAdapter
+        binding.masterSearchInput.addTextChangedListener {
+            val search = binding.masterSearchInput.text.toString()
+            binding.searchRecycler.visibility = VISIBLE
+            ProfessionGetter().getProfessionByKeyWords(search){
+                requireActivity().runOnUiThread{
+                    searchAdapter.setList(it)
+
+                }
+            }
+
+        }
+        searchAdapter.onItemClick= {profession ->
+            mastersViewModel.getMastersByProfession(profession)
+            binding.apply {
+                masterSearchInput.setText(profession.name)
+                searchRecycler.visibility = GONE
+                root.hideKeyboard()
+                masterSearchInput.setText("")
             }
         }
     }
@@ -123,6 +166,14 @@ class ListOfMastersFragment : Fragment() {
         exitBinding.negativeBtn.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    private fun navigateToMasterPage(uid: String){
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(PROFILE_FRAGMENT)
+            .replace(R.id.mainContainer, ProfileFragment.newInstance(uid), PROFILE_FRAGMENT)
+            .commit()
     }
 
     companion object {

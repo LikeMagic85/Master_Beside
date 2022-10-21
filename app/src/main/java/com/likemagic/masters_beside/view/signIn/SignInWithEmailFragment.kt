@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -96,6 +97,7 @@ class SignInWithEmailFragment : Fragment() {
 
     private fun renderSignResult(appState: AppState) {
         if (appState is AppState.SuccessSignIn) {
+            binding.loadingLayout.visibility = GONE
             when (appState.result) {
                 SUCCESSFUL_SIGN -> {
                     Snackbar.make(binding.root, "Вход выполнен", Snackbar.LENGTH_SHORT).show()
@@ -104,6 +106,7 @@ class SignInWithEmailFragment : Fragment() {
             }
         }
         if (appState is AppState.ErrorSignIn) {
+            binding.loadingLayout.visibility = GONE
             when (appState.result) {
                 USER_NOT_FOUND -> {
                     Snackbar.make(
@@ -116,6 +119,9 @@ class SignInWithEmailFragment : Fragment() {
                     Snackbar.make(binding.root, "Неверный пароль", Snackbar.LENGTH_SHORT).show()
                 }
             }
+        }
+        if(appState is AppState.Loading){
+            binding.loadingLayout.visibility = VISIBLE
         }
     }
 

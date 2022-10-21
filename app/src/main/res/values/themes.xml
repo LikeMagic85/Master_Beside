@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.МастерРядом" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#0027FF</item>
+        <item name="colorPrimary">#23A300</item>
         <item name="colorPrimaryVariant">#4CC66F</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -21,7 +21,7 @@
 
     <!--MY STYLES-->
 
-    <style name="Theme.МастерРядом.Splash">
+    <style name="Theme.МастерРядом.Splash" parent="Widget.AppCompat.Toolbar">
         <item name="android:windowBackground">@drawable/loading_logo</item>
     </style>
     <style name="MyMaterialButtons" parent="Widget.MaterialComponents.Button">

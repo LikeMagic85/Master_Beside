@@ -10,4 +10,6 @@
     <color name="blue">#007AFD</color>
     <color name="primary">#CC0202</color>
     <color name="gray">#303030</color>
+    <color name="loading_layout_background_color">#C6FFFFFF</color>
+    <color name="my_gray">#A7A7A7</color>
 </resources>

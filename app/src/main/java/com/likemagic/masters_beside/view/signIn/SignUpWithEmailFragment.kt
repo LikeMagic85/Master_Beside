@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -86,6 +88,7 @@ class SignUpWithEmailFragment : Fragment() {
 
     private fun renderSignResult(appState: AppState) {
         if (appState is AppState.ErrorSignIn) {
+            binding.loadingLayout.visibility = GONE
             when (appState.result) {
                 ALREADY_REGISTER -> {
                     Snackbar.make(
@@ -101,6 +104,7 @@ class SignUpWithEmailFragment : Fragment() {
             }
         }
         if (appState is AppState.SuccessPostEmail) {
+            binding.loadingLayout.visibility = GONE
             if (appState.result) {
                 createSignDialog()
             } else {
@@ -112,6 +116,7 @@ class SignUpWithEmailFragment : Fragment() {
             }
         }
         if(appState is AppState.SuccessLink){
+            binding.loadingLayout.visibility = GONE
             if (appState.result == SUCCESS_LINK){
                 Snackbar.make(
                     binding.root,
@@ -119,6 +124,9 @@ class SignUpWithEmailFragment : Fragment() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+        if(appState is AppState.Loading){
+            binding.loadingLayout.visibility = VISIBLE
         }
     }
 

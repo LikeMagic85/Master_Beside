@@ -61,8 +61,28 @@
     <string name="licenseAbout">Лицензии</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="terms_of_use">Условия использования</string>
-    <string name="review_text">Отзывов</string>
+    <string name="review_text">Отзывы</string>
     <string name="service_or_master_text"><font size="35">Услуга или специалист</font></string>
     <string name="no_empty">Поле не может быть пустым</string>
+    <string name="alert_dialog_mail_text">Для того чтобы пользоваться всеми возможностями приложения, необходимо добавить адрес электронной почты.</string>
+    <string name="add_email_text">Добавить почту</string>
+    <string name="menu_profile">Профиль</string>
+    <string name="menu_favorite">Избранные</string>
+    <string name="menu_message">Сообщения</string>
+    <string name="menu_main">Главная</string>
+    <string name="menu_orders">Заказы</string>
+    <string name="main_information">Основная информация</string>
+    <string name="experience_title">Опыт работы</string>
+    <string name="about_me_text">О мастере</string>
+    <string name="not_register_text">Похоже что вы не вошли в свой аккаунт. Если вы еще не регистрировались, сделайте это прямо сейчас.</string>
+    <string name="change_photo_text">Сменить фото профиля</string>
+    <string name="contacts_title_text">Контакты</string>
+    <string name="is_email_ver_text">Контакты доступны только пользователям с подтвержденным адресом электронной почты</string>
+    <string name="send_message_text">Написать</string>
+    <string name="change_account_data_title">Изменение личных данных</string>
+    <string name="your_age_text">Ваш возраст</string>
+    <string name="your_exp_text">Опишите ваш опыт по профессии</string>
+    <string name="your_cost_text">Минимальная цена за ваши услуги в BYN</string>
+    <string name="cost_title_text">Цена за услуги</string>
 
 </resources>

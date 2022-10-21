@@ -12,6 +12,7 @@ class ListOfProfessionAdapter(private var list: List<Profession> = listOf()): Re
     var onItemClick: ((Profession) -> Unit)? = null
     fun setList(newList: List<Profession>) {
         this.list = newList
+        notifyDataSetChanged()
     }
 
     inner class ProfessionViewHolder(view: View):RecyclerView.ViewHolder(view) {

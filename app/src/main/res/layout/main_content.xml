@@ -4,21 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.CollapsingToolbarLayout
         android:elevation="100dp"
         android:layout_width="?attr/actionBarSize"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@android:color/transparent"
+        android:padding="3dp"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_account" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/toolbarImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_account"/>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     <FrameLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
+        android:layout_marginBottom="?actionBarSize"
         android:layout_height="match_parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
