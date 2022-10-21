@@ -54,24 +54,31 @@ class MastersViewModel:ViewModel() {
                 if(list.isNotEmpty()){
                     if(uid == accountBase.uid){
                         if (editState){
-                            liveData.postValue(AppState.MyProfile(list[0],
+                            liveData.postValue(AppState.MasterPage(list[0],
                                 isMy = true,
+                                isEmailVer = true,
                                 editState = true
                             ))
                         }else{
-                            liveData.postValue(AppState.MyProfile(list[0],true, editState = false))
+                            liveData.postValue(AppState.MasterPage(list[0],true, isEmailVer = true, editState = false))
                         }
                     }else{
-                        if (accountBase.currentUser?.isEmailVerified!!){
-                            liveData.postValue(AppState.MasterPage(list[0],
-                                isMy = false,
-                                isEmailVer = true
-                            ))
+                        if(accountBase.uid != null){
+                            if (accountBase.currentUser?.isEmailVerified!!){
+                                liveData.postValue(AppState.MasterPage(list[0],
+                                    isMy = false,
+                                    isEmailVer = true,
+                                    editState = false
+                                ))
+                            }else{
+                                liveData.postValue(AppState.MasterPage(list[0],
+                                    isMy = false,
+                                    isEmailVer = false,
+                                    editState = false
+                                ))
+                            }
                         }else{
-                            liveData.postValue(AppState.MasterPage(list[0],
-                                isMy = false,
-                                isEmailVer = false
-                            ))
+                            liveData.postValue(AppState.EmptyList)
                         }
                     }
                 }else{

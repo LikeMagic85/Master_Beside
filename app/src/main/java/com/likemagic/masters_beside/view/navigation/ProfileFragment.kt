@@ -68,28 +68,16 @@ class ProfileFragment : Fragment() {
         setToolbarVisibility(requireActivity(), false)
         val arguments = arguments
         val uid = arguments?.getString(MASTER_ID)
+        mastersViewModel.getMaster(uid!!,false)
         mastersViewModel.getLiveData().observe(viewLifecycleOwner){
             renderData(it)
         }
-        mastersViewModel.getMaster(uid!!,false)
     }
 
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = VISIBLE
-            }
-            is AppState.MyProfile -> {
-                binding.loadingLayout.visibility = GONE
-                setUpFields(appState.master, appState.isMy)
-                setUpEditFields(appState.master)
-                binding.sendMessageBtn.visibility = GONE
-                binding.changePhoto.setOnClickListener {
-                    openGalleryForImage()
-                }
-                binding.deleteAccount.setOnClickListener {
-                    createRemoveDialog(appState.master)
-                }
             }
             is AppState.EmptyList -> {
                 binding.loadingLayout.visibility = GONE
@@ -99,6 +87,15 @@ class ProfileFragment : Fragment() {
                 binding.loadingLayout.visibility = GONE
                 setUpFields(appState.master, appState.isMy)
                 showContacts(appState.isEmailVer)
+                if (appState.isMy){
+                    setUpEditFields(appState.master)
+                }
+                binding.changePhoto.setOnClickListener {
+                    openGalleryForImage()
+                }
+                binding.deleteAccount.setOnClickListener {
+                    createRemoveDialog(appState.master)
+                }
             }
             is AppState.UpdateMaster -> {
                 binding.loadingLayout.visibility = GONE
@@ -109,11 +106,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpFields(master: Master, isMy: Boolean){
+        checkOwner(isMy)
         binding.apply {
             setUpProfileImage(master)
             setUpMainInformation(master)
         }
-        checkOwner(isMy)
     }
 
     private fun checkOwner(isMy: Boolean) {
@@ -122,6 +119,14 @@ class ProfileFragment : Fragment() {
                 editProfile.visibility = VISIBLE
                 deleteAccount.visibility = VISIBLE
                 changePhoto.visibility = VISIBLE
+                binding.sendMessageBtn.visibility = GONE
+            }
+        }else{
+            binding.apply {
+                editProfile.visibility = GONE
+                deleteAccount.visibility = GONE
+                changePhoto.visibility = GONE
+                binding.sendMessageBtn.visibility = VISIBLE
             }
         }
     }
@@ -282,6 +287,7 @@ class ProfileFragment : Fragment() {
     private fun showContacts(isEmailVer:Boolean){
         if(isEmailVer){
             binding.contactsContainer.visibleContacts.visibility = VISIBLE
+            binding.contactsContainer.disableContacts.visibility = GONE
         }else{
             binding.contactsContainer.visibleContacts.visibility = GONE
             binding.contactsContainer.disableContacts.visibility = VISIBLE

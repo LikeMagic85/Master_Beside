@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         mastersViewModel.getLiveData().observe(this){
-            if (it is AppState.MyProfile){
+            if (it is AppState.MasterPage){
                 if (it.editState){
                     signViewModel.uploadImage(prepareImage(bitmap), it.master, null)
                 }else{
@@ -186,8 +186,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun logOutUser() {
-        findViewById<TextView>(R.id.drawerUserText).text =
-            resources.getString(R.string.drawer_guest)
+        findViewById<TextView>(R.id.drawerUserText).text = resources.getString(R.string.drawer_guest)
         findViewById<TextView>(R.id.signOrRegText).visibility = VISIBLE
         findViewById<ImageView>(R.id.logOut).visibility = GONE
         findViewById<ImageView>(R.id.userPhoto).setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_account_black))

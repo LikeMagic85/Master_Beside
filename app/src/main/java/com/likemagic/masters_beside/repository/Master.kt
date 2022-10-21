@@ -19,5 +19,6 @@ data class Master(
     val reviews:List<Review> = listOf(),
     var age:String = "",
     var uriImage:String = "",
-    var experience:String = ""
+    var experience:String = "",
+    val favorite:List<String> = listOf()
 ):Parcelable
