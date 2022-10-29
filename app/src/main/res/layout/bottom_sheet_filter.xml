@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    android:alpha="0.95"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/fragment_padding"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <View
+        android:id="@+id/bottomSheetLine"
+        android:layout_width="35dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/my_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/filterTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/search_with_param"
+        android:textSize="16sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/bottomSheetLine" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/filterProfession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/profession_text"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/filterProfessionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintStart_toEndOf="@id/filterProfession"
+        app:layout_constraintTop_toBottomOf="@id/filterTitle"
+        tools:text="Программист" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cityContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/filterProfession">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/filterCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/city_text"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filterCityLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/filterCity">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filterCityInput"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:inputType="textCapWords"
+                android:padding="3dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/toCostBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_image_button_bg"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_arrow_forward"
+            app:layout_constraintBottom_toTopOf="@id/filterCityLayout"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/costContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/filterProfession">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/filterCost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/filter_cost_text"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filterCostLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/filterCost">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filterCostInput"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:inputType="numberDecimal"
+                android:padding="3dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/toSwitchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_image_button_bg"
+            android:src="@drawable/ic_arrow_forward"
+            app:layout_constraintBottom_toTopOf="@id/filterCostLayout"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/toCityBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_image_button_bg"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintBottom_toTopOf="@id/filterCostLayout"
+            app:layout_constraintEnd_toStartOf="@id/toSwitchBtn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/switchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/filterProfession">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/onlyVip"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center_vertical"
+            android:text="@string/only_vip_text"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/onlyVipSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginEnd="75dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/onlyVip" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/backToCostBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_image_button_bg"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintBottom_toTopOf="@id/onlyVip"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cityRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:stackFromEnd="false"
+        app:reverseLayout="true"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginBottom="68dp"
+        app:layout_constraintBottom_toBottomOf="@id/cityContainer"
+        tools:listitem="@layout/item_list_city" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

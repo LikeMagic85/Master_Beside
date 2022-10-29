@@ -44,8 +44,8 @@ class SignViewModel : ViewModel() {
     }
 
     fun sendVerificationEmail(user: FirebaseUser) {
+        liveData.postValue(AppState.Loading)
         user.sendEmailVerification().addOnCompleteListener {
-            liveData.postValue(AppState.Loading)
             if (it.isSuccessful) {
                 liveData.postValue(AppState.SuccessPostEmail(true, user.email!!))
             } else if (it.isCanceled) {
@@ -54,16 +54,15 @@ class SignViewModel : ViewModel() {
         }
     }
 
-    fun signInWithEmail(email: String, password: String) {
+    fun signInWithEmail(email: String, password: String, isNew:Boolean) {
         liveData.postValue((AppState.Loading))
         accountBase.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
-                liveData.postValue(
-                    AppState.SuccessSignIn(
-                        SUCCESSFUL_SIGN,
-                        it.result.user?.email!!
+                if(!isNew){
+                    liveData.postValue(
+                        AppState.SuccessSignIn(SUCCESSFUL_SIGN,it.result.user?.email!!)
                     )
-                )
+                }
             } else if (it.isCanceled) {
                 liveData.postValue(AppState.SuccessSignIn(SIGN_ERROR, "Гость"))
             } else if (it.exception is FirebaseAuthInvalidUserException) {
@@ -127,27 +126,23 @@ class SignViewModel : ViewModel() {
     fun signInWithPhoneAuthCredential(code:String) {
         liveData.postValue(AppState.Loading)
         val credential = PhoneAuthProvider.getCredential(signInWithPhone.id, code)
-        accountBase.signInWithCredential(credential)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val isNew = it.result.additionalUserInfo?.isNewUser
-                    val hasEmail = !it.result.user!!.email.isNullOrEmpty()
-                    liveData.postValue(AppState.SuccessSignInWithPhone(it.result.user!!, isNew!!, hasEmail))
-                }else {
-                    val exception = it.exception as FirebaseAuthException
-                    Log.d("@@@", exception.errorCode)
-                    if (it.exception is FirebaseAuthInvalidCredentialsException) {
-                        val exception = it.exception as FirebaseAuthInvalidCredentialsException
-                        Log.d("@@@", exception.errorCode)
-                        if(exception.errorCode == ERROR_INVALID_VERIFICATION_CODE){
-                            liveData.postValue(AppState.ErrorVerificationCode)
-                        }
+        accountBase.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val isNew = it.result.additionalUserInfo?.isNewUser
+                val hasEmail = !it.result.user!!.email.isNullOrEmpty()
+                liveData.postValue(AppState.SuccessSignInWithPhone(it.result.user!!, isNew!!, hasEmail))
+            }else {
+                if (it.exception is FirebaseAuthInvalidCredentialsException) {
+                    val exception = it.exception as FirebaseAuthInvalidCredentialsException
+                    if(exception.errorCode == ERROR_INVALID_VERIFICATION_CODE){
+                        liveData.postValue(AppState.ErrorVerificationCode)
                     }
                 }
             }
+        }
     }
 
-    fun linkPhoneWithEmail(email: String, password: String){
+    fun linkEmailToPhone(email: String, password: String){
         liveData.postValue(AppState.Loading)
         val credential = EmailAuthProvider.getCredential(email, password)
         accountBase.currentUser?.linkWithCredential(credential)?.addOnCompleteListener {
@@ -165,6 +160,30 @@ class SignViewModel : ViewModel() {
         }
     }
 
+    fun linkPhoneToEmail(code:String, master: Master) {
+        liveData.postValue(AppState.Loading)
+        val credential = PhoneAuthProvider.getCredential(signInWithPhone.id, code)
+        accountBase.currentUser?.linkWithCredential(credential)?.addOnCompleteListener {
+            if (it.isSuccessful) {
+                liveData.postValue(AppState.ConfirmDone(master))
+            }else {
+                if (it.exception is FirebaseAuthInvalidCredentialsException) {
+                    val exception = it.exception as FirebaseAuthInvalidCredentialsException
+                    if (exception.errorCode == ERROR_INVALID_VERIFICATION_CODE) {
+                        liveData.postValue(AppState.ErrorVerificationCode)
+                    } else if (exception.errorCode == ERROR_CREDENTIAL_ALREADY_IN_USE) {
+                        liveData.postValue((AppState.PhoneInUse))
+                    }
+                } else if (it.exception is FirebaseAuthUserCollisionException) {
+                    val exception = it.exception as FirebaseAuthUserCollisionException
+                    if (exception.errorCode == ERROR_CREDENTIAL_ALREADY_IN_USE){
+                        liveData.postValue((AppState.PhoneInUse))
+                    }
+                }
+            }
+        }
+    }
+
     fun createNewMaster(master: Master){
         val uid = accountBase.currentUser?.uid!!
         master.uid = uid
@@ -176,7 +195,7 @@ class SignViewModel : ViewModel() {
     }
 
     fun uploadImage(byteArray: ByteArray, master: Master?, user: User?){
-        val storageRef = DBManager().storage.child(DBManager().auth.uid!!).child("image${accountBase.uid}")
+        val storageRef = DBManager().storage.child(DBManager().accountBase.uid!!).child("image${accountBase.uid}")
         val upTask = storageRef.putBytes(byteArray)
         upTask.continueWithTask {
             storageRef.downloadUrl
@@ -184,6 +203,10 @@ class SignViewModel : ViewModel() {
             master?.uriImage = it.result.toString()
             liveData.postValue(AppState.UploadImage(master))
         }
+    }
+
+    fun deleteAccount(){
+        accountBase.currentUser?.delete()
     }
 
 }

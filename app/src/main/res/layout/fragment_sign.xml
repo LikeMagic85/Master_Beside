@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#F6F5F5"
+    android:layout_marginLeft="-20dp"
+    android:layout_marginRight="-20dp"
+    android:layout_marginBottom="-20dp"
     android:clickable="true"
     android:focusable="true"
-    android:padding="@dimen/fragment_padding"
-    tools:context=".view.signIn.SignFragment">
+    android:padding="@dimen/fragment_padding">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,118 +23,62 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_black"
+                app:fontFamily="@font/roboto_bold"
                 android:gravity="center"
                 android:text="@string/question_sign"
-                android:textSize="@dimen/title_size"
-                android:textStyle="bold|italic"
+                android:textSize="20sp"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/logoImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/logo"
+                app:layout_constraintBottom_toTopOf="@id/regBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/regBtn"
-                android:layout_width="wrap_content"
+                android:layout_width="155dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
                 android:text="@string/sign_in_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/logoImage"
+                app:layout_constraintBottom_toTopOf="@id/signInBtn"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/subTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/roboto_black"
+                app:fontFamily="@font/roboto_bold"
                 android:gravity="center"
                 android:text="@string/have_account_text"
-                android:textSize="@dimen/title_size"
-                android:textStyle="bold|italic"
-                app:layout_constraintTop_toBottomOf="@+id/regBtn" />
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/regBtn"
+                app:layout_constraintBottom_toTopOf="@id/signInBtn"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/signText"
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signInBtn"
+                android:layout_width="155dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
                 android:text="@string/sign_in_text"
-                android:textSize="24sp"
-                app:layout_constraintTop_toBottomOf="@id/subTitle" />
-
-            <LinearLayout
-                android:id="@+id/btnContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signText">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/emailBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email_password_text" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/phoneBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/with_phone_text" />
-
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/socialText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:text="Войти с помощью"
-                app:layout_constraintTop_toBottomOf="@id/btnContainer" />
-
-            <LinearLayout
-                android:id="@+id/socialContainer"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:orientation="horizontal"
+                android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/socialText">
+                app:layout_constraintTop_toBottomOf="@id/subTitle" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/signWithGoogleBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="65dp"
-                    android:layout_weight="0.3"
-                    android:padding="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/g_logo" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="65dp"
-                    android:layout_weight="0.3"
-                    android:padding="15dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/vk" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="65dp"
-                    android:layout_weight="0.3"
-                    android:padding="15dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/fb" />
-
-            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/bottomSheet"
+            layout="@layout/bottom_sheet_sign"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <FrameLayout
         android:id="@+id/loadingLayout"
@@ -146,7 +91,7 @@
         android:elevation="20dp"
         android:focusable="true"
         android:visibility="gone"
-        tools:visibility="visible">
+        >
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_width="wrap_content"

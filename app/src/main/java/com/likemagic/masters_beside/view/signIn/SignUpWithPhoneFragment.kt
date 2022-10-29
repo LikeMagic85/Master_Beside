@@ -20,6 +20,7 @@ import com.likemagic.masters_beside.databinding.FragmentSignUpWithPhoneBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.SignViewModel
+import kotlin.concurrent.thread
 
 class SignUpWithPhoneFragment : Fragment() {
 
@@ -27,7 +28,7 @@ class SignUpWithPhoneFragment : Fragment() {
     private val binding: FragmentSignUpWithPhoneBinding
         get() = _binding!!
 
-    private val viewModel: SignViewModel by activityViewModels()
+    private val signViewModel: SignViewModel by activityViewModels()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -53,11 +54,13 @@ class SignUpWithPhoneFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolbarVisibility(requireActivity(), false)
-        viewModel.getLiveData().observe(viewLifecycleOwner) {
+        signViewModel.getLiveData().observe(viewLifecycleOwner) {
             renderSignResult(it)
         }
         signUpWithPhone()
         binding.title.text = "Вход по номеру телефона"
+        binding.timer.visibility = GONE
+        binding.nextTimerText.visibility = GONE
     }
 
     private fun signUpWithPhone() {
@@ -69,18 +72,28 @@ class SignUpWithPhoneFragment : Fragment() {
                 signInBtn.visibility = GONE
                 loginPhone.visibility = GONE
                 confirmCode.visibility = VISIBLE
-                text.visibility = GONE
                 title.apply {
                     text = "Введите код подтверждения"
                     textSize = 22f
                 }
+                binding.timer.visibility = VISIBLE
+                binding.nextTimerText.visibility = VISIBLE
             }
-            viewModel.signInWithPhone(phone, requireActivity())
+            signViewModel.signInWithPhone(phone, requireActivity())
+            startTimer(){
+                try {
+                    requireActivity().runOnUiThread{
+                        try{
+                            binding.timer.text = it.toString()
+                        }catch (e:Throwable){return@runOnUiThread}
+                    }
+                }catch (e:Throwable){return@startTimer}
+            }
         }
         binding.codeInput.addTextChangedListener {
             val code = binding.codeInput.text.toString()
             if(code.length == 6 ){
-                viewModel.signInWithPhoneAuthCredential(code)
+                signViewModel.signInWithPhoneAuthCredential(code)
                 binding.root.hideKeyboard()
             }
         }
@@ -91,13 +104,11 @@ class SignUpWithPhoneFragment : Fragment() {
         if(appState is AppState.SuccessSignInWithPhone){
             binding.loadingLayout.visibility = GONE
             if(appState.isNew){
-                createAlertDialog()
+                Snackbar.make(binding.root, "Пользователь не зарегистрирован", Snackbar.LENGTH_SHORT).show()
+                signViewModel.deleteAccount()
+                removeFragment(SIGN_FRAGMENT, requireActivity())
             }else{
-                if(appState.hasEmail){
-                    removeFragment(SIGN_FRAGMENT, requireActivity())
-                }else{
-                    createAlertDialog()
-                }
+                removeFragment(SIGN_FRAGMENT, requireActivity())
             }
         } else if (appState is AppState.ErrorVerificationCode){
             binding.loadingLayout.visibility = GONE
@@ -126,18 +137,29 @@ class SignUpWithPhoneFragment : Fragment() {
         val dialog = builder.show()
         alertBinding.alertBtn.setOnClickListener {
             removeFragment(SIGN_UP_WITH_PHONE_FRAGMENT, requireActivity())
-            navigateTo(LinkWithEmailFragment.newInstance(), LINK_WITH_EMAIL_FRAGMENT)
+            navigateTo(LinkWithEmailFragment.newInstance(), LINK_WITH_EMAIL_FRAGMENT, requireActivity())
             dialog.dismiss()
         }
 
     }
 
-    private fun navigateTo(fragment: Fragment, name: String) {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainContainer, fragment, name)
-            .addToBackStack(name)
-            .commit()
+    private fun startTimer(callback:(Int)->Unit){
+        thread {
+            var i = 60
+            while (i>=0){
+                Thread.sleep(1000)
+                if(i == 0){
+                    try{
+                        requireActivity().runOnUiThread {
+                            binding.signInBtn.visibility = VISIBLE
+                        }
+                    }catch (e:Throwable){return@thread}
+                    break
+                }
+                i--
+                callback.invoke(i)
+            }
+        }
     }
 
     companion object {

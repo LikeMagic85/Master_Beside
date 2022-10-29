@@ -6,10 +6,10 @@
     <item>
         <shape>
             <gradient
-                android:endColor="?colorPrimary"
+                android:endColor="@color/white"
                 android:gradientRadius="500dp"
-                android:startColor="?colorPrimaryVariant"
-                android:type="linear"/>
+                android:startColor="@color/my_gray"
+                android:type="radial"/>
         </shape>
     </item>
 

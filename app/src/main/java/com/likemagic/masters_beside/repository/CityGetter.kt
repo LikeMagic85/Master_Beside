@@ -1,6 +1,7 @@
 package com.likemagic.masters_beside.repository
 
 import android.content.Context
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -23,7 +24,7 @@ class CityGetter {
             }
 
         }catch (e: IOException){
-
+            Log.d("error", e.message.toString())
         }
         return tempArray
     }

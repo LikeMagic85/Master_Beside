@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,8 +9,8 @@
         android:elevation="100dp"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
         android:padding="3dp"
+        android:layout_marginTop="5dp"
         android:minHeight="?attr/actionBarSize"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +33,39 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_marginBottom="?actionBarSize"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <FrameLayout
+            android:id="@+id/loadingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="-20dp"
+            android:layout_marginEnd="-20dp"
+            android:background="@color/loading_layout_background_color"
+            android:elevation="20dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:indeterminate="true"
+                app:indicatorColor="?colorPrimaryVariant"
+                app:indicatorSize="50dp"
+                app:trackColor="?colorPrimary"
+                app:trackThickness="6dp" />
+
+        </FrameLayout>
+
+    </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_menu"/>
 

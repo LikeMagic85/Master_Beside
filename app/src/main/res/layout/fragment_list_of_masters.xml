@@ -1,63 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="@dimen/fragment_padding"
-    android:paddingEnd="@dimen/fragment_padding">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/searchContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:background="@android:color/white"
-        android:stateListAnimator="@animator/search_animation"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/masterSearch"
-            android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
-            app:endIconDrawable="@drawable/ic_search"
-            app:endIconMode="custom">
-
-            <com.likemagic.masters_beside.utils.MyEditText
-                android:id="@+id/masterSearchInput"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:hint="@string/service_or_master_text"
-                android:inputType="textCapSentences"
-                android:padding="3dp"
-                android:singleLine="true"
-                android:textSize="14sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-    </FrameLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/masterList"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_list_master" />
+        android:background="@color/white">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/searchContainer"
-        tools:listitem="@layout/item_list_search"
-        />
+
+        <LinearLayout
+            android:id="@+id/titleOfListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-20dp"
+            android:layout_marginEnd="-20dp"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:stateListAnimator="@animator/search_animation"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/masterSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="40dp"
+                app:endIconDrawable="@drawable/ic_search"
+                app:endIconMode="custom">
+
+                <com.likemagic.masters_beside.utils.MyEditText
+                    android:id="@+id/masterSearchInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:padding="3dp"
+                    android:hint="@string/service_or_master_text"
+                    android:inputType="textCapSentences"
+                    android:singleLine="true"
+                    android:textSize="13sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp"
+                android:gravity="center_vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/titleOfList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:padding="12dp"
+                    android:text="@string/all_masters_text"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/filterBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_filter" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/masterList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="100dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/titleOfListContainer"
+            tools:layout_editor_absoluteX="-19dp"
+            tools:listitem="@layout/item_list_master" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="50dp"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_list_search" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/loadingLayout"
@@ -83,4 +127,8 @@
 
     </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        android:id="@+id/bottomSheet"
+        layout="@layout/bottom_sheet_filter"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

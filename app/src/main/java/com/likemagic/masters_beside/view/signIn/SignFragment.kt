@@ -12,6 +12,8 @@ import androidx.transition.TransitionInflater
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignBinding
 import com.likemagic.masters_beside.utils.*
@@ -22,7 +24,7 @@ class SignFragment : Fragment() {
     private var _binding: FragmentSignBinding? = null
     private val binding: FragmentSignBinding
         get() = _binding!!
-    private val viewModel: SignViewModel by activityViewModels()
+    private val signViewModel: SignViewModel by activityViewModels()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -48,10 +50,11 @@ class SignFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.loadingLayout.visibility = GONE
         setToolbarVisibility(requireActivity(), false)
-        viewModel.getLiveData().observe(viewLifecycleOwner){
+        signViewModel.getLiveData().observe(viewLifecycleOwner){
             renderResult(it)
         }
         setUpBtn()
+        bottomSheetBehaviorSetup()
     }
 
 
@@ -59,16 +62,30 @@ class SignFragment : Fragment() {
     private fun setUpBtn() {
         binding.regBtn.setOnClickListener {
             removeFragment(SIGN_FRAGMENT, requireActivity())
-            navigateTo(SignUpWithEmailFragment.newInstance(), SIGN_UP_WITH_EMAIL_FRAGMENT)
+            navigateTo(SignUpWithEmailFragment.newInstance(), SIGN_UP_WITH_EMAIL_FRAGMENT, requireActivity())
         }
-        binding.emailBtn.setOnClickListener {
-            navigateTo(SignInWithEmailFragment.newInstance(), SIGN_IN_WITH_EMAIL_FRAGMENT)
+        binding.bottomSheet.emailBtn.setOnClickListener {
+            navigateTo(SignInWithEmailFragment.newInstance(), SIGN_IN_WITH_EMAIL_FRAGMENT, requireActivity())
         }
-        binding.phoneBtn.setOnClickListener {
-            navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_UP_WITH_PHONE_FRAGMENT)
+        binding.bottomSheet.phoneBtn.setOnClickListener {
+            navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_UP_WITH_PHONE_FRAGMENT,requireActivity())
         }
-        binding.signWithGoogleBtn.setOnClickListener {
+        binding.bottomSheet.signWithGoogleBtn.setOnClickListener {
             signInWithGoogle()
+        }
+        binding.bottomSheet.signWithVkBtn.setOnClickListener {
+            Snackbar.make(binding.root, "Скоро будет доступно", Snackbar.LENGTH_SHORT).show()
+        }
+        binding.bottomSheet.signWithFbBtn.setOnClickListener {
+            Snackbar.make(binding.root, "Скоро будет доступно", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun bottomSheetBehaviorSetup(){
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        binding.signInBtn.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
 
@@ -76,8 +93,9 @@ class SignFragment : Fragment() {
         if(appState is AppState.SuccessSignInWithGoogle){
             binding.loadingLayout.visibility = GONE
             if(appState.isNew){
+                Snackbar.make(binding.root, "Пользователь не зарегистрирован", Snackbar.LENGTH_SHORT).show()
+                signViewModel.deleteAccount()
                 removeFragment(SIGN_FRAGMENT, requireActivity())
-                navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
             }else{
                 removeFragment(SIGN_FRAGMENT, requireActivity())
             }
@@ -86,13 +104,6 @@ class SignFragment : Fragment() {
         }else if (appState is AppState.ErrorSignIn){
             binding.loadingLayout.visibility = GONE
         }
-    }
-
-    private fun navigateTo(fragment: Fragment, name: String) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .addToBackStack(name)
-            .replace(R.id.mainContainer, fragment, name)
-            .commit()
     }
 
     private fun getSignInClient(): GoogleSignInClient {

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.likemagic.masters_beside.database.DBManager
-import com.likemagic.masters_beside.repository.City
 import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.repository.Profession
 
@@ -21,87 +20,88 @@ class MastersViewModel:ViewModel() {
 
     fun getAllMasters(){
         liveData.postValue(AppState.Loading)
-        dataBase.getAllMasters(object : DBManager.ReadDataCallBack{
-            override fun readData(list: List<Master>) {
-                liveData.postValue(AppState.ListOfMasters(list))
-            }
-
-        })
+        dataBase.getAllMasters { list ->
+            liveData.postValue(AppState.ListOfMasters(list))
+        }
     }
 
     fun getMastersByProfession(profession: Profession){
         liveData.postValue(AppState.Loading)
-        dataBase.getMastersByProfession(profession, object :DBManager.ReadDataCallBack{
-            override fun readData(list: List<Master>) {
-                liveData.postValue(AppState.ListOfMasters(list))
-            }
-        })
+        dataBase.getMastersByProfession(profession) { list ->
+            liveData.postValue(AppState.ListOfMasters(list))
+        }
     }
 
-    fun getMastersByCity(city: City){
+    fun getMaster(master: Master, editState:Boolean){
         liveData.postValue(AppState.Loading)
-        dataBase.getMastersByCity(city, object :DBManager.ReadDataCallBack{
-            override fun readData(list: List<Master>) {
-                liveData.postValue(AppState.ListOfMasters(list))
-            }
-        })
-    }
-
-    fun getMaster(uid: String, editState:Boolean){
-        liveData.postValue(AppState.Loading)
-        dataBase.getMasterByUID(uid, object :DBManager.ReadDataCallBack{
-            override fun readData(list: List<Master>) {
-                if(list.isNotEmpty()){
-                    if(uid == accountBase.uid){
-                        if (editState){
-                            liveData.postValue(AppState.MasterPage(list[0],
-                                isMy = true,
-                                isEmailVer = true,
-                                editState = true
-                            ))
+        getMasterById(master.uid!!){result ->
+            if (result.uid == accountBase.uid){
+               if(editState){
+                   liveData.postValue(AppState.MasterPage(result,true,true,true,result.isEmailChecked, result.isPhoneChecked))
+               }else{
+                   if(!result.isEmailChecked){
+                       if(accountBase.currentUser?.isEmailVerified!!){
+                           result.isEmailChecked = true
+                           updateMaster(result, true)
+                       }else{
+                           liveData.postValue(AppState.MasterPage(result,true,true,false,result.isEmailChecked, result.isPhoneChecked))
+                       }
+                   }else{
+                       liveData.postValue(AppState.MasterPage(result,true,true,false,result.isEmailChecked, result.isPhoneChecked))
+                   }
+               }
+            }else{
+                if(accountBase.currentUser?.uid != null){
+                    getMasterById(accountBase.currentUser?.uid!!){value ->
+                        if (value.isPhoneChecked){
+                            liveData.postValue(AppState.MasterPage(result,isMy = false,true,editState = false, result.isEmailChecked, result.isPhoneChecked))
                         }else{
-                            liveData.postValue(AppState.MasterPage(list[0],true, isEmailVer = true, editState = false))
-                        }
-                    }else{
-                        if(accountBase.uid != null){
-                            if (accountBase.currentUser?.isEmailVerified!!){
-                                liveData.postValue(AppState.MasterPage(list[0],
-                                    isMy = false,
-                                    isEmailVer = true,
-                                    editState = false
-                                ))
-                            }else{
-                                liveData.postValue(AppState.MasterPage(list[0],
-                                    isMy = false,
-                                    isEmailVer = false,
-                                    editState = false
-                                ))
-                            }
-                        }else{
-                            liveData.postValue(AppState.EmptyList)
+                            liveData.postValue(AppState.MasterPage(result,isMy = false,false,editState = false,result.isEmailChecked, result.isPhoneChecked))
                         }
                     }
                 }else{
-                    liveData.postValue(AppState.EmptyList)
+                    liveData.postValue(AppState.NotRegUser(true))
                 }
             }
-        })
+        }
     }
 
-    fun updateMaster(master:Master){
-        liveData.postValue(AppState.Loading)
-        dataBase.updateMaster(master, object : DBManager.UpdateCallBack{
-            override fun updateData(master: Master) {
-                liveData.postValue(AppState.UpdateMaster(master))
+    fun getMasterById(uid: String, masterCallback: MasterCallback){
+        dataBase.getMasterByUID(uid) { list ->
+            if(list.isNotEmpty()){
+                masterCallback.returnMaster(list[0])
+            }else{
+                liveData.postValue(AppState.EmptyList(true))
             }
-        })
+        }
+    }
 
+    fun getMyData(){
+        dataBase.getMyData(){
+            liveData.postValue(AppState.MyData(it))
+        }
+    }
+
+    fun updateMaster(master:Master, isNeed:Boolean){
+        dataBase.updateMaster(master) { liveData.postValue(AppState.UpdateMaster(it, isNeed)) }
     }
 
     fun deleteMaster(master: Master){
         dataBase.deleteMaster(master) {
             liveData.postValue(AppState.DeleteMaster)
         }
+    }
+
+    fun confirmPhone(master: Master){
+        liveData.postValue(AppState.ConfirmPhone(master))
+    }
+
+    fun addToOnline(master: Master){
+        dataBase.addToOnline(master)
+    }
+
+    fun interface MasterCallback{
+        fun returnMaster(master:Master)
     }
 
 }

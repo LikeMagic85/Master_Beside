@@ -1,4 +1,4 @@
-package com.likemagic.masters_beside.view
+package com.likemagic.masters_beside.view.navigation
 
 import android.os.Bundle
 import android.view.LayoutInflater

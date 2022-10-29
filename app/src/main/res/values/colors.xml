@@ -8,8 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#007AFD</color>
-    <color name="primary">#CC0202</color>
+    <color name="red">#CC0202</color>
     <color name="gray">#303030</color>
-    <color name="loading_layout_background_color">#C6FFFFFF</color>
+    <color name="loading_layout_background_color">#F0FFFFFF</color>
     <color name="my_gray">#A7A7A7</color>
+    <color name="green">#94FF67</color>
+    <color name="vip_color">#FFF3CF</color>
 </resources>

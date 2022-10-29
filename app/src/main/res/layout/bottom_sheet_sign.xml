@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:alpha="0.95"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/fragment_padding"
+    app:behavior_peekHeight="40dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <View
+        android:id="@+id/bottomSheetLine"
+        android:layout_width="35dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/my_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/signInWith"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/sign_in_with_text"
+        android:textSize="20sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomSheetLine" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/emailBtn"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/email_password_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signInWith" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/phoneBtn"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:text="@string/with_phone_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/socialText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="@string/use_social_text"
+        app:layout_constraintTop_toBottomOf="@id/phoneBtn" />
+
+    <LinearLayout
+        android:id="@+id/socialContainer"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/socialText">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/signWithGoogleBtn"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="0.3"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/g_logo" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/signWithVkBtn"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="0.3"
+            android:padding="15dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/vk" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/signWithFbBtn"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="0.3"
+            android:padding="15dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/fb" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

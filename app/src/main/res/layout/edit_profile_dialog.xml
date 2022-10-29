@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/main_information"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:fontFamily="@font/roboto_bold"
             app:layout_constraintTop_toBottomOf="@id/editTitle" />
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/experience_title"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:fontFamily="@font/roboto_bold"
             app:layout_constraintTop_toBottomOf="@id/costEdit" />
 
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/contacts_title_text"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:fontFamily="@font/roboto_bold"
             app:layout_constraintTop_toBottomOf="@id/expEdit" />
 
@@ -211,7 +211,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/about_me_text"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:fontFamily="@font/roboto_bold"
             app:layout_constraintTop_toBottomOf="@id/telegramContainer" />
 
@@ -226,7 +226,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:gravity="top"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:inputType="textMultiLine|textCapSentences"
                 android:overScrollMode="always"
                 android:padding="15dp"

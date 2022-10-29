@@ -1,9 +1,9 @@
 package com.likemagic.masters_beside.view.navigation
 
+import android.animation.Animator
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -16,23 +16,22 @@ import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.likemagic.masters_beside.R
-import com.likemagic.masters_beside.databinding.EditProfileDialogBinding
-import com.likemagic.masters_beside.databinding.FragmentProfileBinding
-import com.likemagic.masters_beside.databinding.NotRegisterDialogBinding
+import com.likemagic.masters_beside.databinding.*
 import com.likemagic.masters_beside.repository.*
-import com.likemagic.masters_beside.utils.ADD_IMAGE_REQUEST_CODE
-import com.likemagic.masters_beside.utils.AndroidPermissionChecker
-import com.likemagic.masters_beside.utils.MASTER_ID
-import com.likemagic.masters_beside.utils.setToolbarVisibility
+import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.ListOfCityAdapter
 import com.likemagic.masters_beside.view.masters.ListOfProfessionAdapter
+import com.likemagic.masters_beside.view.signIn.LinkPhoneFragment
+import com.likemagic.masters_beside.view.signIn.SignUpWithEmailFragment
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.MastersViewModel
+import com.likemagic.masters_beside.viewModel.SignViewModel
 
 
 class ProfileFragment : Fragment() {
@@ -42,6 +41,9 @@ class ProfileFragment : Fragment() {
         get() = _binding!!
 
     private val mastersViewModel: MastersViewModel by activityViewModels()
+    private val signViewModel: SignViewModel by activityViewModels()
+    private val user = FirebaseAuth.getInstance().currentUser
+    private var myData = Master()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,12 +68,28 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolbarVisibility(requireActivity(), false)
-        val arguments = arguments
-        val uid = arguments?.getString(MASTER_ID)
-        mastersViewModel.getMaster(uid!!,false)
-        mastersViewModel.getLiveData().observe(viewLifecycleOwner){
+        val master = initMaster()
+        mastersViewModel.getLiveData().observe(viewLifecycleOwner) {
             renderData(it)
         }
+        mastersViewModel.getMaster(master!!, false)
+        signViewModel.getLiveData().observe(viewLifecycleOwner) {
+            if (it is AppState.SuccessPostEmail) {
+                makeSnackBar(it.result)
+                it.result = false
+            }
+        }
+    }
+
+    private fun makeSnackBar(isSend: Boolean) {
+        if (isSend) {
+            Snackbar.make(binding.root, "Письмо успешно отправлено", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun initMaster(): Master? {
+        val arguments = arguments
+        return arguments?.getParcelable(MASTER_ID)
     }
 
     private fun renderData(appState: AppState) {
@@ -81,35 +99,65 @@ class ProfileFragment : Fragment() {
             }
             is AppState.EmptyList -> {
                 binding.loadingLayout.visibility = GONE
-                createDialog()
+                createDialog(appState.isEmpty)
+                appState.isEmpty = false
             }
             is AppState.MasterPage -> {
+                mastersViewModel.getMyData()
                 binding.loadingLayout.visibility = GONE
                 setUpFields(appState.master, appState.isMy)
-                showContacts(appState.isEmailVer)
-                if (appState.isMy){
+                showContacts(appState.showContacts, appState.master, appState.isMy)
+                confirmContacts(appState.master, appState.isMy)
+                addDeleteToFavorite(appState.master)
+                if (appState.isMy) {
                     setUpEditFields(appState.master)
-                }
-                binding.changePhoto.setOnClickListener {
-                    openGalleryForImage()
-                }
-                binding.deleteAccount.setOnClickListener {
-                    createRemoveDialog(appState.master)
+                    setUpSendingButton(appState.master)
+                    binding.changePhoto.setOnClickListener {
+                        openGalleryForImage()
+                    }
+                    binding.deleteAccount.setOnClickListener {
+                        createRemoveDialog(appState.master)
+                    }
                 }
             }
             is AppState.UpdateMaster -> {
                 binding.loadingLayout.visibility = GONE
-                setUpFields(appState.master, true)
+                if(appState.isNeed){
+                    setUpFields(appState.master, true)
+                    appState.isNeed = false
+                }else{
+                    myData = appState.master
+                }
+            }
+            is AppState.NotRegUser -> {
+                binding.loadingLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
+                binding.progressBar.visibility = GONE
+                makeActionSnackBar(appState.isNotReg)
+                appState.isNotReg = false
+            }
+            is AppState.MyData ->{
+                binding.loadingLayout.visibility = GONE
+                myData = appState.master
             }
             else -> {}
         }
     }
 
-    private fun setUpFields(master: Master, isMy: Boolean){
-        checkOwner(isMy)
-        binding.apply {
-            setUpProfileImage(master)
-            setUpMainInformation(master)
+    private fun makeActionSnackBar(isNotReg: Boolean) {
+        if (isNotReg) {
+            Snackbar.make(binding.root, "Необходима регистрация", Snackbar.LENGTH_LONG)
+                .setAction(requireContext().getString(R.string.sign_in_title)) {
+                    navigateTo(
+                        SignUpWithEmailFragment.newInstance(),
+                        SIGN_UP_WITH_EMAIL_FRAGMENT,
+                        requireActivity()
+                    )
+                }.show()
         }
     }
 
@@ -121,7 +169,7 @@ class ProfileFragment : Fragment() {
                 changePhoto.visibility = VISIBLE
                 binding.sendMessageBtn.visibility = GONE
             }
-        }else{
+        } else {
             binding.apply {
                 editProfile.visibility = GONE
                 deleteAccount.visibility = GONE
@@ -131,66 +179,114 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun FragmentProfileBinding.setUpMainInformation(
-        master: Master
-    ) {
-        profileName.text = master.name
-        profileProfession.text = master.profession.name
-        mainInfCityText.text = master.city.name
-        gradleProfile.text = master.rating.toString()
-        countReviewsProfile.text = master.reviews.size.toString()
-        if (master.age.isNotEmpty()) {
-            mainInfAgeNum.text = master.age
-        } else {
-            mainInfAgeNum.text = "не указан"
+    private fun setUpFields(master: Master, isMy: Boolean) {
+        if(isMy){binding.inFavBtn.visibility = GONE}
+        else{binding.inFavBtn.visibility = VISIBLE}
+        checkOwner(isMy)
+        binding.apply {
+            setUpProfileImage(master)
+            setUpMainInformation(master)
         }
-        if (master.experience.isEmpty()) {
-            experience.text = "не указан"
-        } else {
-            experience.text = master.experience
-        }
-        setUpContacts(master)
-        aboutText.text = master.about
-        costText.text = "от ${master.cost} BYN"
     }
 
-    private fun FragmentProfileBinding.setUpProfileImage(master: Master) {
-        if (master.uriImage.isNotEmpty()) {
-            profileImage.load(master.uriImage)
-        } else {
-            profileImage.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_account
+    private fun setUpMainInformation(master: Master) {
+        binding.apply {
+            profileName.text = master.name
+            profileProfession.text = master.profession.name
+            mainInfCityText.text = master.city.name
+            gradleProfile.text = master.rating.toString()
+            countReviewsProfile.text = master.reviews.size.toString()
+            if (master.age.isNotEmpty()) {
+                mainInfAgeNum.text = master.age
+            } else {
+                mainInfAgeNum.text = "не указан"
+            }
+            if (master.experience.isEmpty()) {
+                experience.text = "не указан"
+            } else {
+                experience.text = master.experience
+            }
+            aboutText.text = master.about
+            costText.text = "от ${master.cost} BYN"
+        }
+    }
+
+    private fun setUpProfileImage(master: Master) {
+        binding.apply {
+            if (master.uriImage.isNotEmpty()) {
+                profileImage.load(master.uriImage)
+            } else {
+                profileImage.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_account
+                    )
                 )
-            )
+            }
         }
     }
 
-    private fun FragmentProfileBinding.setUpContacts(master: Master) {
-        if (master.contact.phone.isEmpty()) {
-            contactsContainer.phoneNumber.text = "не указан"
-        } else {
-            contactsContainer.phoneNumber.text = master.contact.phone
-        }
-        if (master.contact.vider.isEmpty()) {
-            contactsContainer.viberNumber.text = "не указан"
-        } else {
-            contactsContainer.viberNumber.text = master.contact.vider
-        }
-        if (master.contact.email.isEmpty()) {
-            contactsContainer.emailText.text = "не указан"
-        } else {
-            contactsContainer.emailText.text = master.contact.email
-        }
-        if (master.contact.telegram.isEmpty()) {
-            contactsContainer.telegramNumber.text = "не указан"
-        } else {
-            contactsContainer.telegramNumber.text = master.contact.telegram
+    private fun confirmContacts(master: Master, isMy: Boolean) {
+        binding.contactsContainer.apply {
+            if (isMy) {
+                isNotConfirmPhone.visibility = GONE
+                isNotConfirmEmail.visibility = GONE
+                if (master.isPhoneChecked) {
+                    confirmPhone.visibility = VISIBLE
+                    notConfirmPhone.visibility = GONE
+                    isCheckedPhone.visibility = VISIBLE
+                    notCheckedPhone.visibility = GONE
+
+                } else {
+                    confirmPhone.visibility = GONE
+                    notConfirmPhone.visibility = VISIBLE
+                    isCheckedPhone.visibility = GONE
+                    notCheckedPhone.visibility = VISIBLE
+                }
+                if (master.isEmailChecked) {
+                    confirmEmail.visibility = VISIBLE
+                    notConfirmEmail.visibility = GONE
+                    isCheckedEmail.visibility = VISIBLE
+                    notCheckedEmail.visibility = GONE
+
+                } else {
+                    confirmEmail.visibility = GONE
+                    notConfirmEmail.visibility = VISIBLE
+                    isCheckedEmail.visibility = GONE
+                    notCheckedEmail.visibility = VISIBLE
+                }
+            } else {
+                notConfirmPhone.visibility = GONE
+                notConfirmEmail.visibility = GONE
+                if (master.isPhoneChecked) {
+                    confirmPhone.visibility = VISIBLE
+                    isNotConfirmPhone.visibility = GONE
+                    isCheckedPhone.visibility = VISIBLE
+                    notCheckedPhone.visibility = GONE
+
+                } else {
+                    confirmPhone.visibility = GONE
+                    isNotConfirmPhone.visibility = VISIBLE
+                    isCheckedPhone.visibility = GONE
+                    notCheckedPhone.visibility = VISIBLE
+                }
+                if (master.isEmailChecked) {
+                    confirmEmail.visibility = VISIBLE
+                    isNotConfirmEmail.visibility = GONE
+                    isCheckedEmail.visibility = VISIBLE
+                    notCheckedEmail.visibility = GONE
+
+                } else {
+                    confirmEmail.visibility = GONE
+                    isNotConfirmEmail.visibility = VISIBLE
+                    isCheckedEmail.visibility = GONE
+                    notCheckedEmail.visibility = VISIBLE
+                }
+            }
         }
     }
 
-    private fun setUpEditFields(master: Master){
+    private fun setUpEditFields(master: Master) {
         binding.apply {
             editProfile.setOnClickListener {
                 createEditDialog(master)
@@ -203,21 +299,27 @@ class ProfileFragment : Fragment() {
         val view = EditProfileDialogBinding.inflate(requireActivity().layoutInflater)
         builder.setView(view.root)
         val dialog = builder.show()
-        var city = City()
-        var profession = Profession()
+        var newCity = City()
+        var newProfession = Profession()
         val profAdapter = ListOfProfessionAdapter()
         val cityAdapter = ListOfCityAdapter()
         cityAdapter.onItemClick = {
-           view.cityEdit.setText(it.name)
+            view.cityEdit.setText(it.name)
             view.cityRecycler.visibility = GONE
-            city = it
+            newCity = it
         }
         profAdapter.onItemClick = {
             view.profEdit.setText(it.name)
             view.profRecycler.visibility = GONE
-            profession = it
+            newProfession = it
         }
         view.apply {
+            if (master.isPhoneChecked) {
+                phoneContainer.visibility = GONE
+            }
+            if (master.isEmailChecked) {
+                mailContainer.visibility = GONE
+            }
             profEdit.setText(master.profession.name)
             nameEdit.setText(master.name)
             cityEdit.setText(master.city.name)
@@ -231,31 +333,58 @@ class ProfileFragment : Fragment() {
             initCityRecycler(cityAdapter)
             initProfRecycler(profAdapter)
             saveBtn.setOnClickListener {
-                if(profession.name.isEmpty())profession = master.profession
-                if (city.name.isEmpty())city = master.city
-                var cost = costEdit.text.toString()
-                if(cost.isEmpty()) cost = master.cost
-                val contact = Contact(phoneEdit.text.toString(), mailEdit.text.toString(), viberEdit.text.toString(), telegramEdit.text.toString() )
-                if(profession in ProfessionGetter().getAllProfession()){
-                    if(city in CityGetter().getAllCities(requireContext())){
-                        val newMaster = Master(profession,city, nameEdit.text.toString(),editAbout.text.toString(),cost, contact, master.rating, master.vipStatus,master.key, master.uid, master.reviews, ageEdit.text.toString(), master.uriImage, expEdit.text.toString())
-                        mastersViewModel.updateMaster(newMaster)
-                        mastersViewModel.getMaster(arguments?.getString(MASTER_ID)!!, false)
+                if (newProfession.name.isEmpty()) newProfession = master.profession
+                if (newCity.name.isEmpty()) newCity = master.city
+                var newCost = costEdit.text.toString()
+                if (newCost.isEmpty()) newCost = master.cost
+                val newContact = Contact(
+                    phoneEdit.text.toString(),
+                    mailEdit.text.toString(),
+                    viberEdit.text.toString(),
+                    telegramEdit.text.toString()
+                )
+                if (newProfession in ProfessionGetter().getAllProfession()) {
+                    if (newCity in CityGetter().getAllCities(requireContext())) {
+                        val newMaster = master.copy()
+                        newMaster.apply {
+                            profession = newProfession
+                            city = newCity
+                            name = nameEdit.text.toString()
+                            about = editAbout.text.toString()
+                            cost = newCost
+                            if (newContact.phone != contact.phone) {
+                                newMaster.isPhoneChecked = false
+                            }
+                            if (newContact.email != contact.email) {
+                                isEmailChecked = false
+                            }
+                            contact = newContact
+                            age = ageEdit.text.toString()
+                            experience = expEdit.text.toString()
+                        }
+                        mastersViewModel.updateMaster(newMaster, true)
+                        mastersViewModel.getMaster(newMaster, false)
                         dialog.cancel()
-                    }else{
-                        Toast.makeText(requireContext(), "Укажите город из списка", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Укажите город из списка",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                }else{
-                    Toast.makeText(requireContext(), "Выберите профессию из списка", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Выберите профессию из списка",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
 
     }
 
-    private fun EditProfileDialogBinding.initProfRecycler(
-        profAdapter: ListOfProfessionAdapter
-    ) {
+    private fun EditProfileDialogBinding.initProfRecycler(profAdapter: ListOfProfessionAdapter) {
         profRecycler.adapter = profAdapter
         profEdit.addTextChangedListener {
             val professionName = profEdit.text.toString()
@@ -268,9 +397,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun EditProfileDialogBinding.initCityRecycler(
-        cityAdapter: ListOfCityAdapter
-    ) {
+    private fun EditProfileDialogBinding.initCityRecycler(cityAdapter: ListOfCityAdapter) {
         cityRecycler.adapter = cityAdapter
         cityEdit.addTextChangedListener {
             cityRecycler.visibility = VISIBLE
@@ -284,13 +411,75 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun showContacts(isEmailVer:Boolean){
-        if(isEmailVer){
-            binding.contactsContainer.visibleContacts.visibility = VISIBLE
-            binding.contactsContainer.disableContacts.visibility = GONE
-        }else{
+    private fun showContacts(isContactOpen: Boolean, master: Master, isMy: Boolean) {
+        if (isContactOpen) {
+            setUpContacts(master, isMy)
+        } else {
             binding.contactsContainer.visibleContacts.visibility = GONE
             binding.contactsContainer.disableContacts.visibility = VISIBLE
+        }
+    }
+
+    private fun setUpContacts(master: Master, isMy: Boolean) {
+        binding.apply {
+            if (isMy) {
+                binding.contactsContainer.visibleContacts.visibility = VISIBLE
+                binding.contactsContainer.disableContacts.visibility = GONE
+                if (master.contact.phone.isEmpty()) {
+                    contactsContainer.phoneNumber.text = "указать"
+                } else {
+                    contactsContainer.phoneNumber.text = master.contact.phone
+                }
+            } else {
+                if (master.contact.phone.isEmpty()) {
+                    contactsContainer.phoneNumber.text = "не указан"
+                } else {
+                    if (master.isPhoneChecked) {
+                        contactsContainer.visibleContacts.visibility = VISIBLE
+                        contactsContainer.disableContacts.visibility = GONE
+                        contactsContainer.disableContacts.text =
+                            requireContext().getString(R.string.is_email_ver_text)
+                        contactsContainer.phoneNumber.text = master.contact.phone
+                    } else {
+                        contactsContainer.visibleContacts.visibility = GONE
+                        contactsContainer.disableContacts.visibility = VISIBLE
+                        contactsContainer.disableContacts.text =
+                            requireContext().getString(R.string.contacts_is_shadow)
+                    }
+                }
+            }
+            if (master.contact.vider.isEmpty()) {
+                contactsContainer.viberNumber.text = "не указан"
+            } else {
+                contactsContainer.viberNumber.text = master.contact.vider
+            }
+            if (master.contact.email.isEmpty()) {
+                contactsContainer.emailText.text = "не указан"
+            } else {
+                contactsContainer.emailText.text = master.contact.email
+            }
+            if (master.contact.telegram.isEmpty()) {
+                contactsContainer.telegramNumber.text = "не указан"
+            } else {
+                contactsContainer.telegramNumber.text = master.contact.telegram
+            }
+        }
+    }
+
+    private fun setUpSendingButton(master: Master) {
+        binding.contactsContainer.apply {
+            notConfirmPhone.setOnClickListener {
+                val phone = binding.contactsContainer.phoneNumber.text.toString()
+                createLinkDialog(phone, master)
+                if (isValidPhone(phone)) {
+                } else {
+                    Snackbar.make(binding.root, "Неверный формат телефона", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            notConfirmEmail.setOnClickListener {
+                signViewModel.sendVerificationEmail(user!!)
+            }
         }
     }
 
@@ -301,26 +490,87 @@ class ProfileFragment : Fragment() {
         requireActivity().startActivityForResult(intent, ADD_IMAGE_REQUEST_CODE)
     }
 
-    private fun createDialog(){
+    private fun addDeleteToFavorite(master: Master){
+        if(master.uid in myData.favorite){
+            binding.inFavBtn.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite))
+        }else {binding.inFavBtn.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_not_favorite))}
+        binding.inFavBtn.setOnClickListener {
+            if(master.uid in myData.favorite){
+                myData.favorite.remove(master.uid!!)
+                mastersViewModel.updateMaster(myData, false)
+                binding.inFavBtn.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_not_favorite))
+            }else{
+                myData.favorite.add(master.uid!!)
+                mastersViewModel.updateMaster(myData, false)
+                binding.inFavBtn.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite))
+            }
+        }
+    }
+
+    private fun createDialog(isEmpty: Boolean) {
+        if (isEmpty) {
+            binding.root.removeAllViews()
             val builder = AlertDialog.Builder(requireContext())
             val alertBinding = NotRegisterDialogBinding.inflate(requireActivity().layoutInflater)
             builder.setView(alertBinding.root)
             val dialog = builder.show()
             alertBinding.alertBtn.setOnClickListener {
-                requireActivity().findViewById<DrawerLayout>(R.id.mainDrawer).openDrawer(GravityCompat.START)
-                requireActivity().findViewById<BottomNavigationView>(R.id.bottomNav).selectedItemId = R.id.actionHome
                 dialog.dismiss()
+                requireActivity().findViewById<DrawerLayout>(R.id.mainDrawer)
+                    .openDrawer(GravityCompat.START)
+                requireActivity().findViewById<BottomNavigationView>(R.id.bottomNav).selectedItemId =
+                    R.id.actionHome
+            }
         }
     }
 
-    private fun createRemoveDialog(master: Master){
-        mastersViewModel.deleteMaster(master)
+    private fun createRemoveDialog(master: Master) {
+        val builder = AlertDialog.Builder(requireContext())
+        val alertBinding = DeleteDialogBinding.inflate(requireActivity().layoutInflater)
+        builder.setView(alertBinding.root)
+        val dialog = builder.show()
+        alertBinding.alert.animate().scaleX(0.5f).scaleY(0.5f).setDuration(700)
+            .setListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    alertBinding.alert.animate().scaleX(1f).scaleY(1f).duration = 700
+                }
+
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        alertBinding.alertBtn.setOnClickListener {
+            mastersViewModel.deleteMaster(master)
+            dialog.dismiss()
+        }
+    }
+
+    private fun createLinkDialog(phone: String, master: Master) {
+        val builder = AlertDialog.Builder(requireContext())
+        val alertBinding = LinkPhoneDialogBinding.inflate(requireActivity().layoutInflater)
+        builder.setView(alertBinding.root)
+        alertBinding.mail.animate().x(1000f).setDuration(1500)
+            .setListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    alertBinding.mail.animate().x(50f).duration = 1500
+                }
+
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        val dialog = builder.show()
+        alertBinding.alertBtn.setOnClickListener {
+            navigateTo(LinkPhoneFragment.newInstance(phone), LINK_PHONE_FRAGMENT, requireActivity())
+            mastersViewModel.confirmPhone(master)
+            dialog.dismiss()
+        }
     }
 
     companion object {
-        fun newInstance(uid:String):ProfileFragment{
+        fun newInstance(master: Master): ProfileFragment {
             val args = Bundle()
-            args.putString(MASTER_ID, uid)
+            args.putParcelable(MASTER_ID, master)
             val fragment = ProfileFragment()
             fragment.arguments = args
             return fragment

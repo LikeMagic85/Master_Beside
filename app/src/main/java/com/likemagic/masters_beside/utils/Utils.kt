@@ -7,18 +7,17 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.likemagic.masters_beside.R
 import java.io.ByteArrayOutputStream
 
-const val USER_CATEGORY = "user category"
-const val GUEST = 1
-const val USER = 2
-const val MASTER = 3
+
 const val MASTER_ID = "MASTER_ID"
 const val DB_USER = "DB_USER"
 const val DB_MASTER = "DB_MASTER"
+const val PHONE = "PHONE"
 const val ALREADY_REGISTER = "already register"
 const val SUCCESSFUL_SIGN = "SUCCESSFUL_SIGN"
 const val SIGN_ERROR = "SIGN_ERROR"
@@ -34,9 +33,11 @@ const val CREATE_NEW_MASTER_FRAGMENT = "CREATE_NEW_MASTER_FRAGMENT"
 const val CREATE_NEW_USER_FRAGMENT = "CREATE_NEW_USER_FRAGMENT"
 const val LIST_OF_MASTERS_FRAGMENT = "LIST_OF_MASTERS_FRAGMENT"
 const val RESET_PASSWORD_FRAGMENT =  "RESET_PASSWORD_FRAGMENT"
+const val LINK_PHONE_FRAGMENT =  "LINK_PHONE_FRAGMENT"
 const val SIGN_IN_WITH_GOOGLE_REQUEST_CODE = 101
 const val SUCCESS_LINK = "SUCCESS_LINK"
 const val ERROR_INVALID_VERIFICATION_CODE = "ERROR_INVALID_VERIFICATION_CODE"
+const val ERROR_CREDENTIAL_ALREADY_IN_USE = "ERROR_CREDENTIAL_ALREADY_IN_USE"
 const val PROVIDER_PHONE = "phone"
 const val PROVIDER_GOOGLE = "google.com"
 const val PROVIDER_EMAIL = "password"
@@ -46,28 +47,21 @@ const val LINK_WITH_EMAIL_FRAGMENT =  "LINK_WITH_EMAIL_FRAGMENT"
 const val ADD_IMAGE_REQUEST_CODE = 102
 const val STORAGE_REQUEST_CODE = 103
 const val IMAGES = "IMAGES"
-const val CURRENT_MASTER = "CURRENT_MASTER"
+const val REGISTER_EMAIL = "EMAIL"
+const val ONLINE_USERS = "ONLINE_USERS"
+const val TIME_DELAY = 2000
 
-
-open class Utils {
-
-}
 
 fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun View.showKeyboard(editText:androidx.appcompat.widget.AppCompatEditText) {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-}
-
 fun isValidEmail(target: CharSequence?): Boolean {
     return if (TextUtils.isEmpty(target)) {
         false
     } else {
-        Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        Patterns.EMAIL_ADDRESS.matcher(target!!).matches()
     }
 }
 
@@ -77,6 +71,14 @@ fun isValidPassword(password: String?) : Boolean {
         val passwordMatcher = Regex(passwordPattern)
 
         return passwordMatcher.find(password) != null
+    } ?: return false
+}
+
+fun isValidPhone(phone:String?):Boolean{
+    phone?.let{
+        val phonePattern = "^[\\+]?[0-9]{3}?[-\\s\\.]?[0-9]{2}[-\\s\\.]?[0-9]{7}\$"
+        val phoneMatcher = Regex(phonePattern)
+        return phoneMatcher.find(phone) != null
     } ?: return false
 }
 
@@ -97,3 +99,25 @@ fun prepareImage(bitmap: Bitmap):ByteArray{
     bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outStream)
     return outStream.toByteArray()
 }
+
+fun navigateTo(fragment: Fragment, name: String, activity: FragmentActivity) {
+    activity.supportFragmentManager
+        .beginTransaction()
+        .replace(R.id.mainContainer, fragment, name)
+        .addToBackStack(name)
+        .commit()
+}
+
+fun navigateToAndAdd(fragment: Fragment, name: String, activity: FragmentActivity) {
+    activity.supportFragmentManager
+        .beginTransaction()
+        .add(R.id.mainContainer, fragment, name)
+        .addToBackStack(name)
+        .commit()
+}
+
+interface IOnBackPressed {
+    fun onBackPressed(): Boolean
+}
+
+

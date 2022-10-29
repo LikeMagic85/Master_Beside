@@ -17,6 +17,7 @@
         <item name="materialButtonStyle">@style/MyMaterialButtons</item>
         <item name="chipStyle">@style/MyChipStyle</item>
         <item name="textInputStyle">@style/MyTextEditInputStyle</item>
+        <item name="switchStyle">@style/MySwitchStyle</item>
     </style>
 
     <!--MY STYLES-->
@@ -26,8 +27,8 @@
     </style>
     <style name="MyMaterialButtons" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">?colorPrimaryVariant</item>
-        <item name="fontFamily">@font/roboto</item>
-        <item name="android:textColor">?colorSecondary</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">#FBFBFB</item>
     </style>
     <style name="MyChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/background_color_chip_state_list</item>
@@ -38,5 +39,9 @@
     <style name="MyTextEditInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/gray</item>
         <item name="hintTextColor">@color/gray</item>
+    </style>
+    <style name="MySwitchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="trackTint">@color/color_switch_track_state_list</item>
+        <item name="thumbTint">@color/color_switch_thumb_state_list</item>
     </style>
 </resources>

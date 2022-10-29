@@ -6,19 +6,23 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Master(
-    val profession: Profession = Profession(),
-    val city: City = City(),
+    var profession: Profession = Profession(),
+    var city: City = City(),
     var name: String = "",
     var about: String = "",
     var cost: String = "",
-    val contact: Contact = Contact(),
+    var contact: Contact = Contact(),
     var rating: Double = 0.0,
-    var vipStatus: Int = 0,
+    var vipStatus: Boolean = false,
     var key:String? = null,
     var uid:String? = null,
-    val reviews:List<Review> = listOf(),
+    val reviews:ArrayList<Review> = arrayListOf(),
     var age:String = "",
     var uriImage:String = "",
     var experience:String = "",
-    val favorite:List<String> = listOf()
+    val favorite:ArrayList<String> = arrayListOf(),
+    var isPhoneChecked: Boolean = false,
+    var isEmailChecked:Boolean = false,
+    var statusOnline:String = "",
+    var lastVisit:Long = 0
 ):Parcelable

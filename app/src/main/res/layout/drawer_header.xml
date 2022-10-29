@@ -5,7 +5,7 @@
     android:layout_height="@dimen/drawer_header_height"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?colorPrimaryVariant"
-    android:padding="15dp">
+    android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userPhoto"
@@ -16,7 +16,8 @@
         app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/drawerUserText"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/drawerUserText"
@@ -24,9 +25,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/drawer_guest"
-        android:textSize="12sp"
+        android:textSize="13sp"
         app:fontFamily="@font/roboto_bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/signOrRegText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userPhoto" />
@@ -37,7 +38,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/drawer_text"
-        android:textSize="12sp"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/drawerUserText" />
 
     <androidx.appcompat.widget.AppCompatImageView

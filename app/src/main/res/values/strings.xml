@@ -55,14 +55,14 @@
     <string name="confirm_code_hint">Код подтверждения</string>
     <string name="get_confirm_code">Получить код</string>
     <string name="verify_confirm_code">Проверить код</string>
-    <string name="send_sms_text">На указанный номер телефона будет отправлена SMS с кодом подтверждения</string>
+    <string name="send_sms_text">На указанный номер телефона будет отправлено SMS с кодом подтверждения. Внимание! Можно привязть только один номер телефона.</string>
     <string name="about_text">О приложении</string>
     <string name="footerAbout">© Мастер рядом 1.00 2022</string>
     <string name="licenseAbout">Лицензии</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="terms_of_use">Условия использования</string>
     <string name="review_text">Отзывы</string>
-    <string name="service_or_master_text"><font size="35">Услуга или специалист</font></string>
+    <string name="service_or_master_text"><font size="35">Услуга или мастер</font></string>
     <string name="no_empty">Поле не может быть пустым</string>
     <string name="alert_dialog_mail_text">Для того чтобы пользоваться всеми возможностями приложения, необходимо добавить адрес электронной почты.</string>
     <string name="add_email_text">Добавить почту</string>
@@ -77,12 +77,31 @@
     <string name="not_register_text">Похоже что вы не вошли в свой аккаунт. Если вы еще не регистрировались, сделайте это прямо сейчас.</string>
     <string name="change_photo_text">Сменить фото профиля</string>
     <string name="contacts_title_text">Контакты</string>
-    <string name="is_email_ver_text">Контакты доступны только пользователям с подтвержденным адресом электронной почты</string>
+    <string name="is_email_ver_text">Вы сможете увидеть контакты другого пользователя, только после того как подтвердите номер своего телефона</string>
+    <string name="contacts_is_shadow">"Пользователь ещё не подтвердил свой номер телефона, поэтому его контакты скрыты"</string>
     <string name="send_message_text">Написать</string>
     <string name="change_account_data_title">Изменение личных данных</string>
     <string name="your_age_text">Ваш возраст</string>
     <string name="your_exp_text">Опишите ваш опыт по профессии</string>
     <string name="your_cost_text">Минимальная цена за ваши услуги в BYN</string>
     <string name="cost_title_text">Цена за услуги</string>
+    <string name="number_phone_text">Номер телефона</string>
+    <string name="confirm_email_text">Почтовый ящик</string>
+    <string name="confirm_text">подтверждён</string>
+    <string name="need_confirm_text">подтвердить</string>
+    <string name="is_not_confirm_text">не подтверждён</string>
+    <string name="delete_dialog_text">Внимание! Данная операция полностью удалит ваш аккаунт без возможности восстановления!</string>
+    <string name="delete_text">Удалить</string>
+    <string name="phone_mask">+375</string>
+    <string name="sign_in_with_text">Войти с помощью</string>
+    <string name="all_masters_text">Все мастера</string>
+    <string name="search_with_param">Поиск по параметрам</string>
+    <string name="city_text">Город</string>
+    <string name="filter_cost_text">Цена до</string>
+    <string name="only_vip_text">Только VIP</string>
+    <string name="apply_text">Применить</string>
+    <string name="use_social_text">Используя</string>
+    <string name="profession_text">Выбранная профессия: </string>
+    <string name="online_now_text">Сейчас онлайн</string>
 
 </resources>

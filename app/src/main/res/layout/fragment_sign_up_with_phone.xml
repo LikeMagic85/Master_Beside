@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timerContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:padding="@dimen/fragment_padding"
-    tools:context=".view.signIn.ChoseCategoryFragment">
+    android:padding="@dimen/fragment_padding">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/send_sms_text"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="italic"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
@@ -42,10 +42,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/sign_in_field_margin"
-            android:drawableLeft="@drawable/flag_blr"
+            android:drawableStart="@drawable/flag_blr"
             android:hint="@string/phone_hint"
             android:inputType="phone"
-            android:text="+375" />
+            android:text="@string/phone_mask" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/text">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -66,15 +67,36 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/nextTimerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="13sp"
+        android:layout_marginTop="80dp"
+        android:text="Запросить код повторно можно через"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="60"
+        android:textSize="30sp"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@id/nextTimerText"
+        app:layout_constraintTop_toBottomOf="@id/text" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signInBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/sign_in_field_margin"
         android:text="@string/get_confirm_code"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginPhone" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/loadingLayout"
@@ -86,8 +108,7 @@
         android:clickable="true"
         android:elevation="20dp"
         android:focusable="true"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:visibility="gone">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_width="wrap_content"

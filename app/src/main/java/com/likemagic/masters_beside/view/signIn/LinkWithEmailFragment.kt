@@ -19,6 +19,7 @@ import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentLinkPhoneToEmailBinding
 import com.likemagic.masters_beside.databinding.SignDialogBinding
 import com.likemagic.masters_beside.utils.*
+import com.likemagic.masters_beside.view.masters.CreateNewMasterFragment
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.SignViewModel
 
@@ -59,10 +60,10 @@ class LinkWithEmailFragment : Fragment() {
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             renderSignResult(it)
         }
-        signUpWithEmail()
+        linkWithEmail()
     }
 
-    private fun signUpWithEmail() {
+    private fun linkWithEmail() {
         binding.signInBtn.setOnClickListener {
             val email = binding.loginEmailInput.text.toString()
             val password = binding.loginPasswordInput.text.toString()
@@ -71,7 +72,7 @@ class LinkWithEmailFragment : Fragment() {
             editor.putString(PASSWORD, password).apply()
             if (isValidEmail(email)) {
                 if (isValidPassword(password)) {
-                    viewModel.linkPhoneWithEmail(email, password)
+                    viewModel.linkEmailToPhone(email, password)
                 } else {
                     binding.loginPassword.error = resources.getString(R.string.helper_password_text)
                 }
@@ -84,7 +85,6 @@ class LinkWithEmailFragment : Fragment() {
             }
             it.hideKeyboard()
         }
-
     }
 
     private fun renderSignResult(appState: AppState) {
@@ -143,23 +143,14 @@ class LinkWithEmailFragment : Fragment() {
                 override fun onAnimationRepeat(animation: Animator) {}
             })
         val dialog = builder.show()
-        val password = sp.getString(PASSWORD, "")
         alertBinding.alertBtn.setOnClickListener {
-            viewModel.signInWithEmail(binding.loginEmailInput.text.toString(), password!!)
             removeFragment(LINK_WITH_EMAIL_FRAGMENT, requireActivity())
-            navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
+            navigateTo(CreateNewMasterFragment.newInstance(binding.loginEmailInput.text.toString()), CREATE_NEW_MASTER_FRAGMENT, requireActivity())
             dialog.dismiss()
         }
 
     }
 
-    private fun navigateTo(fragment: Fragment, name: String) {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainContainer, fragment, name)
-            .addToBackStack(name)
-            .commit()
-    }
 
     companion object {
         @JvmStatic

@@ -18,6 +18,7 @@ import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpUserBinding
 import com.likemagic.masters_beside.databinding.SignDialogBinding
 import com.likemagic.masters_beside.utils.*
+import com.likemagic.masters_beside.view.masters.CreateNewMasterFragment
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.SignViewModel
 
@@ -28,7 +29,6 @@ class SignUpWithEmailFragment : Fragment() {
         get() = _binding!!
 
     private val viewModel: SignViewModel by activityViewModels()
-
     lateinit var sp: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
 
@@ -145,22 +145,12 @@ class SignUpWithEmailFragment : Fragment() {
                 override fun onAnimationRepeat(animation: Animator) {}
             })
         val dialog = builder.show()
-        val password = sp.getString(PASSWORD, "")
         alertBinding.alertBtn.setOnClickListener {
-            viewModel.signInWithEmail(binding.loginEmailInput.text.toString(), password!!)
             removeFragment(SIGN_UP_WITH_EMAIL_FRAGMENT, requireActivity())
-            navigateTo(ChoseCategoryFragment.newInstance(), CHOOSE_FRAGMENT)
+            navigateTo(CreateNewMasterFragment.newInstance(binding.loginEmailInput.text.toString()), CREATE_NEW_MASTER_FRAGMENT, requireActivity())
             dialog.dismiss()
         }
 
-    }
-
-    private fun navigateTo(fragment: Fragment, name: String) {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainContainer, fragment, name)
-            .addToBackStack(name)
-            .commit()
     }
 
     companion object {

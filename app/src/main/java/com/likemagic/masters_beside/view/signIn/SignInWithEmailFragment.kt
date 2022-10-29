@@ -80,7 +80,7 @@ class SignInWithEmailFragment : Fragment() {
             editor.putString(PASSWORD, password).apply()
             if (isValidEmail(email)) {
                 if (isValidPassword(password)) {
-                    viewModel.signInWithEmail(email, password)
+                    viewModel.signInWithEmail(email, password, false)
                 } else {
                     binding.loginPassword.error = resources.getString(R.string.helper_password_text)
                 }
