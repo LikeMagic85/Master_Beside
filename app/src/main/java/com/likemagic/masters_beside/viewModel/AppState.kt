@@ -23,6 +23,7 @@ sealed class AppState{
     data class EmptyList(var isEmpty:Boolean = false):AppState()
     data class NotRegUser(var isNotReg:Boolean = false):AppState()
     data class MyData(val master: Master):AppState()
+    data class ListOfFavoriteMasters(val list:ArrayList<Master>):AppState()
     object PhoneInUse:AppState()
     object ErrorVerificationCode: AppState()
     object Logout: AppState()

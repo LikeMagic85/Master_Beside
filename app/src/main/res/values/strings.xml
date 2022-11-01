@@ -103,5 +103,6 @@
     <string name="use_social_text">Используя</string>
     <string name="profession_text">Выбранная профессия: </string>
     <string name="online_now_text">Сейчас онлайн</string>
+    <string name="your_favorite_masters">Ваши избранные мастера</string>
 
 </resources>

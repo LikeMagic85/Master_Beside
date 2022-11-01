@@ -18,6 +18,12 @@ class MastersViewModel:ViewModel() {
         return liveData
     }
 
+    fun getMyData(){
+        dataBase.getMyData(){
+            liveData.postValue(AppState.MyData(it))
+        }
+    }
+
     fun getAllMasters(){
         liveData.postValue(AppState.Loading)
         dataBase.getAllMasters { list ->
@@ -28,7 +34,11 @@ class MastersViewModel:ViewModel() {
     fun getMastersByProfession(profession: Profession){
         liveData.postValue(AppState.Loading)
         dataBase.getMastersByProfession(profession) { list ->
-            liveData.postValue(AppState.ListOfMasters(list))
+            if(list.isEmpty()){
+                liveData.postValue(AppState.EmptyList(true))
+            }else{
+                liveData.postValue(AppState.ListOfMasters(list))
+            }
         }
     }
 
@@ -76,12 +86,6 @@ class MastersViewModel:ViewModel() {
         }
     }
 
-    fun getMyData(){
-        dataBase.getMyData(){
-            liveData.postValue(AppState.MyData(it))
-        }
-    }
-
     fun updateMaster(master:Master, isNeed:Boolean){
         dataBase.updateMaster(master) { liveData.postValue(AppState.UpdateMaster(it, isNeed)) }
     }
@@ -98,6 +102,17 @@ class MastersViewModel:ViewModel() {
 
     fun addToOnline(master: Master){
         dataBase.addToOnline(master)
+    }
+
+    fun getFavoriteMasters(master: Master){
+        liveData.postValue(AppState.Loading)
+        dataBase.getFavoriteMasters(master){list ->
+            if(list.isEmpty()){
+                liveData.postValue(AppState.EmptyList(true))
+            }else{
+                liveData.postValue(AppState.ListOfFavoriteMasters(list))
+            }
+        }
     }
 
     fun interface MasterCallback{

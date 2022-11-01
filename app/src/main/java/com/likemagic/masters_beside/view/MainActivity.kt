@@ -27,11 +27,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ActivityMainBinding
+import com.likemagic.masters_beside.databinding.FragmentFavoriteListBinding
 import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.ListOfMastersFragment
 import com.likemagic.masters_beside.view.navigation.AboutFragment
-import com.likemagic.masters_beside.view.navigation.ProfileFragment
+import com.likemagic.masters_beside.view.navigation.FavoriteListFragment
+import com.likemagic.masters_beside.view.navigation.ProfileMasterFragment
 import com.likemagic.masters_beside.view.signIn.SignFragment
 import com.likemagic.masters_beside.view.signIn.SignUpWithPhoneFragment
 import com.likemagic.masters_beside.viewModel.AppState
@@ -61,13 +63,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onStart() {
         super.onStart()
-        if(accountBase.uid != null){
-            lifecycleScope.launch {
-                try{
-                    checkProvider()
-                }catch (e:Throwable){return@launch}
-            }.start()
-        }
+        lifecycleScope.launch {
+            try{
+                checkProvider()
+            }catch (e:Throwable){return@launch}
+        }.start()
     }
 
     private fun init() {
@@ -120,7 +120,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }else{
-            navigateTo(ListOfMastersFragment.newInstance(), LIST_OF_MASTERS_FRAGMENT, this)
+            navigateTo(SignFragment.newInstance(), SIGN_FRAGMENT, this)
+            // TODO: Решить проблему с ПУСТЫМ СПИСКОМ
         }
     }
 
@@ -144,14 +145,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 updateNavMenu(true)
                 mastersViewModel.getMyData()
             } else if (it is AppState.NewMaster){
-                mastersViewModel.getMyData()
-                navigateTo(ProfileFragment.newInstance(it.master),PROFILE_FRAGMENT, this)
-                binding.mainContent.bottomNav.menu.findItem(
-                    R.id.actionProfile).isChecked = true
-                logInUser()
-                updateNavMenu(true)
+                mastersViewModel.getMasterById(accountBase.uid!!){result->
+                    navigateTo(ProfileMasterFragment.newInstance(result),PROFILE_FRAGMENT, this)
+                    binding.mainContent.bottomNav.menu.findItem(
+                        R.id.actionProfile).isChecked = true
+                    logInUser()
+                    updateNavMenu(true)
+                }
             }else if (it is AppState.UploadImage){
-                mastersViewModel.updateMaster(it.master!!,false)
+                mastersViewModel.updateMaster(it.master!!,true)
             }
         }
         mastersViewModel.getLiveData().observe(this){
@@ -214,18 +216,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     true
                 }
                 R.id.actionFavorite -> {
-                    // TODO:
+                    navigateTo(FavoriteListFragment.newInstance(), FAVORITE_LIST_FRAGMENT, this)
                     true
                 }
                 R.id.actionProfile -> {
                     if(accountBase.uid != null){
                         binding.mainContent.loadingLayout.visibility = VISIBLE
                         mastersViewModel.getMasterById(accountBase.uid!!,){result->
-                            navigateTo(ProfileFragment.newInstance(result), PROFILE_FRAGMENT, this)
+                            navigateTo(ProfileMasterFragment.newInstance(result), PROFILE_FRAGMENT, this)
                             binding.mainContent.loadingLayout.visibility = GONE
                         }
                     }else{
-                        navigateTo(ProfileFragment.newInstance(Master(uid="")), PROFILE_FRAGMENT, this)
+                        navigateTo(ProfileMasterFragment.newInstance(Master(uid="")), PROFILE_FRAGMENT, this)
                     }
                     true
                 }

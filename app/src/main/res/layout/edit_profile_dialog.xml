@@ -81,26 +81,6 @@
             app:layout_constraintTop_toBottomOf="@id/ageEdit"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/experienceTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/experience_title"
-            android:textSize="13sp"
-            app:fontFamily="@font/roboto_bold"
-            app:layout_constraintTop_toBottomOf="@id/costEdit" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/expEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:inputType="textCapSentences"
-            android:textSize="13sp"
-            android:hint="@string/your_exp_text"
-            app:layout_constraintTop_toBottomOf="@id/experienceTitle"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/contactsTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,7 +88,7 @@
             android:text="@string/contacts_title_text"
             android:textSize="13sp"
             app:fontFamily="@font/roboto_bold"
-            app:layout_constraintTop_toBottomOf="@id/expEdit" />
+            app:layout_constraintTop_toBottomOf="@id/costEdit" />
 
         <LinearLayout
             android:id="@+id/phoneContainer"
@@ -206,6 +186,35 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/experienceTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/experience_title"
+            android:textSize="13sp"
+            app:fontFamily="@font/roboto_bold"
+            app:layout_constraintTop_toBottomOf="@id/telegramContainer" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/expEditContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/experienceTitle">
+
+            <com.likemagic.masters_beside.utils.MyEditText
+                android:id="@+id/expEdit"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="top"
+                android:textSize="13sp"
+                android:inputType="textMultiLine|textCapSentences"
+                android:overScrollMode="always"
+                android:padding="15dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/aboutTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -213,7 +222,7 @@
             android:text="@string/about_me_text"
             android:textSize="13sp"
             app:fontFamily="@font/roboto_bold"
-            app:layout_constraintTop_toBottomOf="@id/telegramContainer" />
+            app:layout_constraintTop_toBottomOf="@id/expEditContainer" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/aboutContainer"
@@ -224,7 +233,7 @@
             <com.likemagic.masters_beside.utils.MyEditText
                 android:id="@+id/editAbout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:gravity="top"
                 android:textSize="13sp"
                 android:inputType="textMultiLine|textCapSentences"
@@ -233,7 +242,6 @@
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveBtn"

@@ -24,7 +24,7 @@ import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentListOfMastersBinding
 import com.likemagic.masters_beside.repository.*
 import com.likemagic.masters_beside.utils.*
-import com.likemagic.masters_beside.view.navigation.ProfileFragment
+import com.likemagic.masters_beside.view.navigation.ProfileMasterFragment
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.MastersViewModel
 
@@ -137,7 +137,6 @@ class ListOfMastersFragment : Fragment(), IOnBackPressed {
         }
     }
 
-
     private fun initSearchRecycler(searchAdapter: ListOfSearchAdapter) {
         binding.searchRecycler.adapter = searchAdapter
         binding.masterSearchInput.addTextChangedListener {
@@ -205,6 +204,7 @@ class ListOfMastersFragment : Fragment(), IOnBackPressed {
             binding.bottomSheet.switchContainer.visibility = VISIBLE
             binding.bottomSheet.bottomSheetContainer.hideKeyboard()
             sortByCost(sortedList, cost.toInt())
+            makeTopSnackBar("Найдено мастеров: ${sortedByCostList.size}")
         }
         binding.bottomSheet.backToCostBtn.setOnClickListener {
             TransitionManager.beginDelayedTransition(binding.bottomSheet.bottomSheetContainer, slide)
@@ -270,10 +270,9 @@ class ListOfMastersFragment : Fragment(), IOnBackPressed {
         requireActivity().supportFragmentManager
             .beginTransaction()
             .addToBackStack(PROFILE_FRAGMENT)
-            .add(R.id.mainContainer, ProfileFragment.newInstance(master), PROFILE_FRAGMENT)
+            .add(R.id.mainContainer, ProfileMasterFragment.newInstance(master), PROFILE_FRAGMENT)
             .commit()
     }
-
 
     private fun makeTopSnackBar(text:String){
         val snackBarView = Snackbar.make(binding.root, text , Snackbar.LENGTH_LONG)

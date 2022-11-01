@@ -27,6 +27,8 @@ class DBManager {
                     .setValue(master.profession.name)
                 masterBranch.child(master.key ?: "empty").child("zzz_master/city")
                     .setValue(master.city.name)
+                masterBranch.child(master.key ?: "empty").child("zzz_master/uid")
+                    .setValue(master.uid)
             }
         }
     }
@@ -57,10 +59,7 @@ class DBManager {
                 }
                 readDataCallBack.readData(tempList)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                // TODO:
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
@@ -70,8 +69,7 @@ class DBManager {
     }
 
     fun getMastersByProfession(profession: Profession, readCallBack: ReadDataCallBack) {
-        val query =
-            masterBranch.orderByChild("/zzz_master/profession").equalTo(profession.name)
+        val query = masterBranch.orderByChild("/zzz_master/profession").equalTo(profession.name)
         readMastersFromDB(query, readCallBack)
     }
 
@@ -108,8 +106,35 @@ class DBManager {
         updateMaster(master){  }
     }
 
+    fun getFavoriteMasters(master: Master, readFavoriteCallBack: ReadFavoriteCallBack) {
+        val tempList = ArrayList<Master>()
+        if(master.favorite.isEmpty()){
+            readFavoriteCallBack.readFavorite(tempList)
+        }else{
+            for(uid:String in master.favorite){
+                val query = masterBranch.orderByChild("/zzz_master/uid").equalTo(uid)
+                query.addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (item in snapshot.children) {
+                            val result = item.children.iterator().next().child("master").getValue(Master::class.java)
+                            if(result != null){
+                                tempList.add(result)
+                            }
+                        }
+                        readFavoriteCallBack.readFavorite(tempList)
+                    }
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            }
+        }
+    }
+
     fun interface ReadDataCallBack {
         fun readData(list: ArrayList<Master>)
+    }
+
+    fun interface ReadFavoriteCallBack {
+        fun readFavorite(list: ArrayList<Master>)
     }
 
     fun interface UpdateCallBack {

@@ -1,7 +1,5 @@
 package com.likemagic.masters_beside.view.signIn
 
-import android.animation.Animator
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +13,6 @@ import androidx.transition.TransitionInflater
 import androidx.transition.TransitionManager
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
-import com.likemagic.masters_beside.databinding.AlertDialogBinding
 import com.likemagic.masters_beside.databinding.FragmentSignUpWithPhoneBinding
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.viewModel.AppState
@@ -118,29 +115,6 @@ class SignUpWithPhoneFragment : Fragment() {
         } else if (appState is AppState.ErrorSignIn){
             binding.loadingLayout.visibility = GONE
         }
-    }
-
-    private fun createAlertDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        val alertBinding = AlertDialogBinding.inflate(requireActivity().layoutInflater)
-        builder.setView(alertBinding.root)
-        alertBinding.mail.animate().x(1000f).setDuration(1500)
-            .setListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {}
-                override fun onAnimationEnd(animation: Animator) {
-                    alertBinding.mail.animate().x(50f).duration = 1500
-                }
-
-                override fun onAnimationCancel(animation: Animator) {}
-                override fun onAnimationRepeat(animation: Animator) {}
-            })
-        val dialog = builder.show()
-        alertBinding.alertBtn.setOnClickListener {
-            removeFragment(SIGN_UP_WITH_PHONE_FRAGMENT, requireActivity())
-            navigateTo(LinkWithEmailFragment.newInstance(), LINK_WITH_EMAIL_FRAGMENT, requireActivity())
-            dialog.dismiss()
-        }
-
     }
 
     private fun startTimer(callback:(Int)->Unit){

@@ -16,7 +16,7 @@ import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpWithPhoneBinding
 import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.utils.*
-import com.likemagic.masters_beside.view.navigation.ProfileFragment
+import com.likemagic.masters_beside.view.navigation.ProfileMasterFragment
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.MastersViewModel
 import com.likemagic.masters_beside.viewModel.SignViewModel
@@ -126,7 +126,7 @@ class LinkPhoneFragment : Fragment() {
                 binding.loadingLayout.visibility = GONE
                 appState.master.isPhoneChecked = true
                 mastersViewModel.updateMaster(appState.master, true)
-                navigateTo(ProfileFragment.newInstance(appState.master), PROFILE_FRAGMENT, requireActivity())
+                navigateToAndAdd(ProfileMasterFragment.newInstance(appState.master), PROFILE_FRAGMENT, requireActivity())
             }
             is AppState.PhoneInUse -> {
                 binding.loadingLayout.visibility = GONE
@@ -146,7 +146,9 @@ class LinkPhoneFragment : Fragment() {
                 if(i == 0){
                     try{
                         requireActivity().runOnUiThread {
-                            binding.signInBtn.visibility = VISIBLE
+                            try{
+                                binding.signInBtn.visibility = VISIBLE
+                            }catch (e:Throwable){return@runOnUiThread}
                         }
                     }catch (e:Throwable){return@thread}
                     break

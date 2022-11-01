@@ -34,7 +34,7 @@ import com.likemagic.masters_beside.viewModel.MastersViewModel
 import com.likemagic.masters_beside.viewModel.SignViewModel
 
 
-class ProfileFragment : Fragment() {
+class ProfileMasterFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
@@ -54,6 +54,7 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        removeFragment(PROFILE_FRAGMENT, requireActivity())
         _binding = null
     }
 
@@ -124,7 +125,6 @@ class ProfileFragment : Fragment() {
                 binding.loadingLayout.visibility = GONE
                 if(appState.isNeed){
                     setUpFields(appState.master, true)
-                    appState.isNeed = false
                 }else{
                     myData = appState.master
                 }
@@ -330,6 +330,7 @@ class ProfileFragment : Fragment() {
             viberEdit.setText(master.contact.vider)
             telegramEdit.setText(master.contact.telegram)
             editAbout.setText(master.about)
+            costEdit.setText(master.cost)
             initCityRecycler(cityAdapter)
             initProfRecycler(profAdapter)
             saveBtn.setOnClickListener {
@@ -561,17 +562,17 @@ class ProfileFragment : Fragment() {
             })
         val dialog = builder.show()
         alertBinding.alertBtn.setOnClickListener {
-            navigateTo(LinkPhoneFragment.newInstance(phone), LINK_PHONE_FRAGMENT, requireActivity())
+            navigateToAndAdd(LinkPhoneFragment.newInstance(phone), LINK_PHONE_FRAGMENT, requireActivity())
             mastersViewModel.confirmPhone(master)
             dialog.dismiss()
         }
     }
 
     companion object {
-        fun newInstance(master: Master): ProfileFragment {
+        fun newInstance(master: Master): ProfileMasterFragment {
             val args = Bundle()
             args.putParcelable(MASTER_ID, master)
-            val fragment = ProfileFragment()
+            val fragment = ProfileMasterFragment()
             fragment.arguments = args
             return fragment
         }

@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-
         <LinearLayout
             android:id="@+id/titleOfListContainer"
             android:layout_width="match_parent"
@@ -86,7 +85,6 @@
             android:paddingBottom="100dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/titleOfListContainer"
-            tools:layout_editor_absoluteX="-19dp"
             tools:listitem="@layout/item_list_master" />
 
         <androidx.recyclerview.widget.RecyclerView
