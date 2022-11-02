@@ -73,7 +73,9 @@
         android:layout_marginStart="-20dp"
         android:layout_marginEnd="-20dp"
         android:background="@color/loading_layout_background_color"
+        android:clickable="true"
         android:elevation="20dp"
+        android:focusable="true"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -81,8 +83,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
             android:indeterminate="true"
             app:indicatorColor="?colorPrimaryVariant"
             app:indicatorSize="50dp"

@@ -70,7 +70,7 @@
     <string name="menu_favorite">Избранные</string>
     <string name="menu_message">Сообщения</string>
     <string name="menu_main">Главная</string>
-    <string name="menu_orders">Заказы</string>
+    <string name="menu_orders">Работы</string>
     <string name="main_information">Основная информация</string>
     <string name="experience_title">Опыт работы</string>
     <string name="about_me_text">О мастере</string>
@@ -104,5 +104,18 @@
     <string name="profession_text">Выбранная профессия: </string>
     <string name="online_now_text">Сейчас онлайн</string>
     <string name="your_favorite_masters">Ваши избранные мастера</string>
+    <string name="all_jobs_text">Все работы</string>
+    <string name="add_job_text">Добавить работу</string>
+    <string name="name_of_job_text">Название работы</string>
+    <string name="job_name_hint_text">Краткое описание работы</string>
+    <string name="full_message_helper">Подробное описание</string>
+    <string name="job_message_hint">Опишите подробно, что нужно сделать</string>
+    <string name="work_only_vip">Работа только для VIP мастеров</string>
+    <string name="create_job_text">Создать работу</string>
+    <string name="pay_for_job_text">Палата за работу</string>
+    <string name="cost_hint_text">Оплата за выполнение</string>
+    <string name="title_job_text">Описание работы</string>
+    <string name="posted_by_text">Разместил:</string>
+    <string name="job_date_text">Размещена</string>
 
 </resources>

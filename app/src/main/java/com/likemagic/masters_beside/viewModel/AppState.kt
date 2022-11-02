@@ -3,7 +3,6 @@ package com.likemagic.masters_beside.viewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseUser
 import com.likemagic.masters_beside.repository.Master
-import com.likemagic.masters_beside.repository.User
 
 
 sealed class AppState{
@@ -16,7 +15,7 @@ sealed class AppState{
     data class NewMaster(val master: Master):AppState()
     data class ListOfMasters(val list:ArrayList<Master>):AppState()
     data class MasterPage(val master: Master, var isMy: Boolean, val showContacts: Boolean, val editState:Boolean, var isEmailChecked:Boolean, var isPhoneChecked: Boolean):AppState()
-    data class UploadImage(val master: Master? = null, val user: User? =null):AppState()
+    data class UploadImage(val master: Master? = null):AppState()
     data class UpdateMaster(val master: Master,var  isNeed:Boolean):AppState()
     data class ConfirmPhone(val master: Master):AppState()
     data class ConfirmDone(val master: Master):AppState()

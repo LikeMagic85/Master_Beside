@@ -13,7 +13,7 @@ import com.likemagic.masters_beside.repository.Profession
 import com.likemagic.masters_beside.utils.DB_MASTER
 import com.likemagic.masters_beside.utils.IMAGES
 
-class DBManager {
+class MastersDB {
     val storage = Firebase.storage.getReference(IMAGES)
     val masterBranch = Firebase.database.getReference(DB_MASTER)
     val accountBase = Firebase.auth
@@ -46,7 +46,6 @@ class DBManager {
             }
         }
     }
-
 
     private fun readMastersFromDB(query: Query, readDataCallBack: ReadDataCallBack) {
         query.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -81,12 +80,14 @@ class DBManager {
     fun getMyData(myDataCallback: MyDataCallback){
         masterBranch.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                var result = Master()
                 for (item in snapshot.children) {
                     val master = item.child("/${accountBase.currentUser?.uid}/master").getValue(Master::class.java)
                     if(master != null){
-                        myDataCallback.myData(master)
+                        result = master
                     }
                 }
+                myDataCallback.myData(result)
             }
             override fun onCancelled(error: DatabaseError) {}
         })

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemJobContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:elevation="5dp"
+    android:translationZ="3dp"
+    app:cardCornerRadius="15dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="center_vertical">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/masterPhotoListItem"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="10dp"
+                app:civ_border_color="@color/my_gray"
+                app:civ_border_width="2dp"
+                android:src="@drawable/ic_account" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/itemNameContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toEndOf="@+id/masterPhotoListItem"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/jobNameListItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto_black"
+                    tools:text="Master name" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/jobCreateTimeListItem"
+                    android:layout_width="wrap_content"
+                    android:textSize="11sp"
+                    android:layout_height="wrap_content"
+                    tools:text="на сайте 2 дня назад" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/itemCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/itemNameContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="от 200 BYN" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:alpha="0.3"
+            android:background="?colorSecondary" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/cityItemList"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content"
+                app:fontFamily="@font/roboto_bold"
+                tools:text="@string/master_city_text"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.cardview.widget.CardView>

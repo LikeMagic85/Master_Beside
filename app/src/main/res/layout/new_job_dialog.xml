@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/fragment_padding">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_job_text"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/jobNameHelper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/name_of_job_text"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_bold"
+            app:layout_constraintTop_toBottomOf="@id/dialogTitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jobName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="30"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/jobNameHelper">
+
+            <com.likemagic.masters_beside.utils.MyEditText
+                android:id="@+id/jobNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/new_user_input_height"
+                android:hint="@string/job_name_hint_text"
+                android:inputType="textCapSentences"
+                android:padding="3dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/jobMessageHelper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/full_message_helper"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_bold"
+            app:layout_constraintTop_toBottomOf="@id/jobName" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jobMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/jobMessageHelper">
+
+            <com.likemagic.masters_beside.utils.MyEditText
+                android:id="@+id/jobMessageInput"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="top"
+                android:hint="@string/job_message_hint"
+                android:inputType="textMultiLine|textCapSentences"
+                android:overScrollMode="always"
+                android:padding="10dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/jobCostHelper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/pay_for_job_text"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_bold"
+            app:layout_constraintTop_toBottomOf="@id/jobMessage" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jobCost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/jobCostHelper">
+
+            <com.likemagic.masters_beside.utils.MyEditText
+                android:id="@+id/jobCostInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/new_user_input_height"
+                android:hint="@string/cost_hint_text"
+                android:inputType="numberDecimal"
+                android:padding="3dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/forVipContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/jobCost">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/onlyForVIPText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/work_only_vip"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/onlyVipSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/createJobBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="30dp"
+            android:text="@string/create_job_text"
+            app:layout_constraintTop_toBottomOf="@id/forVipContainer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

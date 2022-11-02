@@ -48,6 +48,11 @@ const val STORAGE_REQUEST_CODE = 103
 const val IMAGES = "IMAGES"
 const val REGISTER_EMAIL = "EMAIL"
 const val TIME_DELAY = 2000
+const val NOT_MASTER = "NOT_MASTER"
+const val JOBS_BRANCH = "JOBS_BRANCH"
+const val JOBS_LIST_FRAGMENT =  "JOBS_LIST_FRAGMENT"
+const val JOB_FRAGMENT =  "JOB_FRAGMENT"
+const val JOB_ID = "JOB_ID"
 
 
 fun View.hideKeyboard() {
@@ -84,6 +89,11 @@ fun removeFragment(name:String, activity: FragmentActivity){
     activity.supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 }
 
+fun delFragment(fragment: Fragment, activity: FragmentActivity){
+    activity.supportFragmentManager.beginTransaction()
+        .remove(fragment).commit()
+}
+
 fun setToolbarVisibility(activity: FragmentActivity, flag:Boolean){
     if(flag){
         activity.findViewById<ImageView>(R.id.toolbarImg).animate().scaleX(1f).scaleY(1f)
@@ -101,8 +111,8 @@ fun prepareImage(bitmap: Bitmap):ByteArray{
 fun navigateTo(fragment: Fragment, name: String, activity: FragmentActivity) {
     activity.supportFragmentManager
         .beginTransaction()
-        .replace(R.id.mainContainer, fragment, name)
         .addToBackStack(name)
+        .replace(R.id.mainContainer, fragment, name)
         .commit()
 }
 
@@ -112,6 +122,13 @@ fun navigateToAndAdd(fragment: Fragment, name: String, activity: FragmentActivit
         .add(R.id.mainContainer, fragment, name)
         .addToBackStack(name)
         .commit()
+}
+
+fun getRandomString(length: Int) : String {
+    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    return (1..length)
+        .map { allowedChars.random() }
+        .joinToString("")
 }
 
 interface IOnBackPressed {

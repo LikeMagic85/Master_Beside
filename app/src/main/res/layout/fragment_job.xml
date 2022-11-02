@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/fragment_padding">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_job_text"
+        android:textSize="18sp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/delJobBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ownerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/posted_by_text"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintBottom_toBottomOf="@id/jobOwnerPhoto"
+        app:layout_constraintStart_toEndOf="@id/jobOwnerPhoto"
+        app:layout_constraintTop_toTopOf="@id/jobOwnerPhoto" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ownerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/jobOwnerPhoto"
+        app:layout_constraintStart_toEndOf="@id/ownerTitle"
+        app:layout_constraintTop_toTopOf="@id/jobOwnerPhoto"
+        tools:text="Дмитрий" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/jobOwnerPhoto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_account"
+        app:civ_border_color="@color/my_gray"
+        app:civ_border_width="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/editJobBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/shortDesc" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/shortDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/name_of_job_text"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/jobOwnerPhoto" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/jobName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/shortDesc"
+        tools:text="Покосить" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/fullDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/shortDesc"
+        android:text="@string/full_message_helper" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/jobMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fullDesc"
+        tools:text="Покосить" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/costDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/fullDesc"
+        android:text="@string/pay_for_job_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/jobCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/costDesc"
+        tools:text="300 BYN" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dateDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:fontFamily="@font/roboto_bold"
+        app:layout_constraintTop_toBottomOf="@id/costDesc"
+        android:text="@string/job_date_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/jobDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dateDesc"
+        tools:text="3 дня назад" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/toProfileBtn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/menu_profile"
+        app:layout_constraintEnd_toStartOf="@id/sendMessageBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/jobDate" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sendMessageBtn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/send_message_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/toProfileBtn"
+        app:layout_constraintTop_toBottomOf="@id/jobDate" />
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-20dp"
+        android:layout_marginEnd="-20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/loading_layout_background_color"
+        android:elevation="20dp"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?colorPrimaryVariant"
+            app:indicatorSize="50dp"
+            app:trackColor="?colorPrimary"
+            app:trackThickness="6dp" />
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

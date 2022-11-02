@@ -7,10 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.*
-import com.likemagic.masters_beside.database.DBManager
+import com.likemagic.masters_beside.database.MastersDB
 import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.repository.SignInWithPhone
-import com.likemagic.masters_beside.repository.User
 import com.likemagic.masters_beside.utils.*
 
 
@@ -18,7 +17,7 @@ class SignViewModel : ViewModel() {
     private val liveData: MutableLiveData<AppState> by lazy { MutableLiveData<AppState>() }
     private val accountBase = FirebaseAuth.getInstance()
     private val signInWithPhone: SignInWithPhone = SignInWithPhone(accountBase)
-    private val dataBase = DBManager()
+    private val dataBase = MastersDB()
 
     fun getLiveData(): LiveData<AppState> {
         return liveData
@@ -194,8 +193,8 @@ class SignViewModel : ViewModel() {
 
     }
 
-    fun uploadImage(byteArray: ByteArray, master: Master?, user: User?){
-        val storageRef = DBManager().storage.child(DBManager().accountBase.uid!!).child("image${accountBase.uid}")
+    fun uploadImage(byteArray: ByteArray, master: Master?){
+        val storageRef = MastersDB().storage.child(MastersDB().accountBase.uid!!).child("image${accountBase.uid}")
         val upTask = storageRef.putBytes(byteArray)
         upTask.continueWithTask {
             storageRef.downloadUrl

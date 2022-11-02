@@ -11,9 +11,9 @@
     <FrameLayout
         android:id="@+id/titleOfListContainer"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@android:color/white"
         android:stateListAnimator="@animator/search_animation"
+        android:background="@color/white"
+        android:layout_height="65dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -24,13 +24,13 @@
             android:layout_gravity="center_vertical"
             android:padding="12dp"
             android:layout_marginStart="70dp"
-            android:text="@string/your_favorite_masters"
+            android:text="@string/all_jobs_text"
             android:textSize="18sp"
             app:fontFamily="@font/roboto_bold" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/masterList"
+        android:id="@+id/jobList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
@@ -38,7 +38,20 @@
         android:paddingBottom="100dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/titleOfListContainer"
-        tools:listitem="@layout/item_list_master" />
+        tools:listitem="@layout/item_list_job" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newJobBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?colorPrimaryVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:borderWidth="0dp"
+        app:maxImageSize="36dp"
+        app:srcCompat="@drawable/ic_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="15dp"
+        android:contentDescription="@string/add_job_text" />
 
     <FrameLayout
         android:id="@+id/loadingLayout"

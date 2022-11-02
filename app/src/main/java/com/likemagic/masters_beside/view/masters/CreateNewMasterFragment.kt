@@ -29,7 +29,6 @@ class CreateNewMasterFragment : Fragment() {
         get() = _binding!!
 
     private val viewModel: SignViewModel by activityViewModels()
-    private var category = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +39,7 @@ class CreateNewMasterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
         _binding = null
     }
 
@@ -88,6 +88,9 @@ class CreateNewMasterFragment : Fragment() {
         }
         binding.newMasterSave.setOnClickListener {
             saveMaster(profession, city, cityList, professionList)
+        }
+        binding.newUserSave.setOnClickListener {
+            saveNotMaster(city, cityList)
         }
 
     }
@@ -148,6 +151,34 @@ class CreateNewMasterFragment : Fragment() {
         binding.root.hideKeyboard()
     }
 
+    private fun saveNotMaster(city: City, cityList: List<City>) {
+        val profession = Profession(NOT_MASTER)
+        val name = binding.masterNameInput.text.toString()
+        val contact = Contact()
+        contact.email = arguments?.getString(REGISTER_EMAIL)!!
+        contact.phone = binding.masterPhoneInput.text.toString()
+        if (binding.masterCityInput.text.isNullOrEmpty()) {
+            binding.masterCity.error = resources.getString(R.string.no_empty)
+        } else if (binding.masterNameInput.text.isNullOrEmpty()) {
+            binding.masterName.error = resources.getString(R.string.no_empty)
+        } else if (binding.masterCity.isErrorEnabled) {
+            Snackbar.make(binding.root, "Мы не знаем такого города", Snackbar.LENGTH_SHORT)
+                .show()
+        } else {
+            if (city in cityList) {
+                createNewMaster(profession, city, name,"", contact)
+                requireActivity().findViewById<BottomNavigationItemView>(R.id.actionHome).isSelected =
+                    false
+                requireActivity().findViewById<BottomNavigationItemView>(R.id.actionProfile).isSelected =
+                    true
+                removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
+
+        }else(Snackbar.make(binding.root, "Выберите город из списка", Snackbar.LENGTH_SHORT)
+        .show())
+    }
+        binding.root.hideKeyboard()
+    }
+
     private fun createNewMaster(
         profession: Profession,
         city: City,
@@ -174,12 +205,29 @@ class CreateNewMasterFragment : Fragment() {
     private fun setUpUser() {
         binding.regBtn.setOnClickListener {
             if (binding.userChip.isChecked) {
-
+                binding.choseContainer.animate().scaleX(0f).scaleY(0f).setListener(object : AnimatorListener{
+                    override fun onAnimationStart(animation: Animator) {}
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.newMasterContainer.visibility = VISIBLE
+                        binding.professionHelper.visibility = GONE
+                        binding.masterProfessionContainer.visibility = GONE
+                        binding.newMasterSave.visibility = GONE
+                        binding.newUserSave.visibility = VISIBLE
+                        binding.masterAboutContainer.visibility = GONE
+                    }
+                    override fun onAnimationCancel(animation: Animator) {}
+                    override fun onAnimationRepeat(animation: Animator) {}
+                })
             } else if (binding.masterChip.isChecked) {
                 binding.choseContainer.animate().scaleX(0f).scaleY(0f).setListener(object : AnimatorListener{
                     override fun onAnimationStart(animation: Animator) {}
                     override fun onAnimationEnd(animation: Animator) {
                         binding.newMasterContainer.visibility = VISIBLE
+                        binding.professionHelper.visibility = VISIBLE
+                        binding.masterProfessionContainer.visibility = VISIBLE
+                        binding.newMasterSave.visibility = VISIBLE
+                        binding.newUserSave.visibility = GONE
+                        binding.masterAboutContainer.visibility = VISIBLE
                     }
                     override fun onAnimationCancel(animation: Animator) {}
                     override fun onAnimationRepeat(animation: Animator) {}

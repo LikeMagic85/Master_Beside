@@ -14,7 +14,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentFavoriteListBinding
 import com.likemagic.masters_beside.repository.Master
+import com.likemagic.masters_beside.utils.FAVORITE_LIST_FRAGMENT
 import com.likemagic.masters_beside.utils.PROFILE_FRAGMENT
+import com.likemagic.masters_beside.utils.removeFragment
 import com.likemagic.masters_beside.utils.setToolbarVisibility
 import com.likemagic.masters_beside.view.masters.ListOfMastersAdapter
 import com.likemagic.masters_beside.viewModel.AppState

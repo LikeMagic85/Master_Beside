@@ -34,6 +34,7 @@ import com.likemagic.masters_beside.view.masters.ListOfMastersFragment
 import com.likemagic.masters_beside.view.navigation.AboutFragment
 import com.likemagic.masters_beside.view.navigation.FavoriteListFragment
 import com.likemagic.masters_beside.view.navigation.ProfileMasterFragment
+import com.likemagic.masters_beside.view.navigation.jobs.JobsListFragment
 import com.likemagic.masters_beside.view.signIn.SignFragment
 import com.likemagic.masters_beside.view.signIn.SignUpWithPhoneFragment
 import com.likemagic.masters_beside.viewModel.AppState
@@ -119,9 +120,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     navigateTo(SignUpWithPhoneFragment.newInstance(), SIGN_UP_WITH_PHONE_FRAGMENT, this)
                 }
             }
-        }else{
-            navigateTo(SignFragment.newInstance(), SIGN_FRAGMENT, this)
-            // TODO: Решить проблему с ПУСТЫМ СПИСКОМ
         }
     }
 
@@ -159,7 +157,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mastersViewModel.getLiveData().observe(this){
             if (it is AppState.MasterPage){
                 if (it.editState){
-                    signViewModel.uploadImage(prepareImage(bitmap), it.master, null)
+                    signViewModel.uploadImage(prepareImage(bitmap), it.master)
                 }
             }else if ( it is AppState.UpdateMaster){
                 mastersViewModel.getMasterById(accountBase.uid!!,){result->
@@ -208,7 +206,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     true
                 }
                 R.id.actionOrders -> {
-                    // TODO:
+                    navigateTo(JobsListFragment.newInstance(), JOBS_LIST_FRAGMENT, this)
                     true
                 }
                 R.id.actionMessage -> {

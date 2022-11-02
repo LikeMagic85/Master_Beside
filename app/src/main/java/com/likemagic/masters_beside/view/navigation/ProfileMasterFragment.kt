@@ -54,7 +54,6 @@ class ProfileMasterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        removeFragment(PROFILE_FRAGMENT, requireActivity())
         _binding = null
     }
 
@@ -107,6 +106,7 @@ class ProfileMasterFragment : Fragment() {
                 mastersViewModel.getMyData()
                 binding.loadingLayout.visibility = GONE
                 setUpFields(appState.master, appState.isMy)
+                checkProfession(appState.master)
                 showContacts(appState.showContacts, appState.master, appState.isMy)
                 confirmContacts(appState.master, appState.isMy)
                 addDeleteToFavorite(appState.master)
@@ -125,6 +125,7 @@ class ProfileMasterFragment : Fragment() {
                 binding.loadingLayout.visibility = GONE
                 if(appState.isNeed){
                     setUpFields(appState.master, true)
+                    checkProfession(appState.master)
                 }else{
                     myData = appState.master
                 }
@@ -175,6 +176,24 @@ class ProfileMasterFragment : Fragment() {
                 deleteAccount.visibility = GONE
                 changePhoto.visibility = GONE
                 binding.sendMessageBtn.visibility = VISIBLE
+            }
+        }
+    }
+
+    private  fun checkProfession(master: Master){
+        if(master.profession.name == NOT_MASTER){
+            binding.apply {
+                profileProfession.text = "Заказчик"
+                ratingContainer.visibility = GONE
+                experience.visibility = GONE
+                experienceTitle.visibility = GONE
+                aboutText.visibility = GONE
+                aboutTitle.visibility = GONE
+                costTitle.visibility = GONE
+                costText.visibility = GONE
+                reviewsTitle.visibility = GONE
+                reviewsRecycler.visibility = GONE
+                inFavBtn.visibility = GONE
             }
         }
     }
@@ -299,6 +318,17 @@ class ProfileMasterFragment : Fragment() {
         val view = EditProfileDialogBinding.inflate(requireActivity().layoutInflater)
         builder.setView(view.root)
         val dialog = builder.show()
+        if(master.profession.name == NOT_MASTER){
+            view.apply {
+                profEdit.visibility = GONE
+                costEdit.visibility = GONE
+                experienceTitle.visibility = GONE
+                expEditContainer.visibility = GONE
+                expEdit.visibility = GONE
+                aboutTitle.visibility = GONE
+                editAbout.visibility = GONE
+            }
+        }
         var newCity = City()
         var newProfession = Profession()
         val profAdapter = ListOfProfessionAdapter()
@@ -344,7 +374,7 @@ class ProfileMasterFragment : Fragment() {
                     viberEdit.text.toString(),
                     telegramEdit.text.toString()
                 )
-                if (newProfession in ProfessionGetter().getAllProfession()) {
+                if (newProfession in ProfessionGetter().getAllProfession() || newProfession.name == NOT_MASTER) {
                     if (newCity in CityGetter().getAllCities(requireContext())) {
                         val newMaster = master.copy()
                         newMaster.apply {
@@ -367,22 +397,13 @@ class ProfileMasterFragment : Fragment() {
                         mastersViewModel.getMaster(newMaster, false)
                         dialog.cancel()
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Укажите город из списка",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(requireContext(),"Укажите город из списка", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Выберите профессию из списка",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText( requireContext(),"Выберите профессию из списка",Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
     }
 
     private fun EditProfileDialogBinding.initProfRecycler(profAdapter: ListOfProfessionAdapter) {

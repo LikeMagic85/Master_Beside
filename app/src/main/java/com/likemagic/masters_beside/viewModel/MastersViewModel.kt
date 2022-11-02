@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.likemagic.masters_beside.database.DBManager
+import com.likemagic.masters_beside.database.MastersDB
 import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.repository.Profession
+import com.likemagic.masters_beside.utils.NOT_MASTER
 
 class MastersViewModel:ViewModel() {
     private val liveData: MutableLiveData<AppState> by lazy {MutableLiveData<AppState>()}
-    private val dataBase = DBManager()
+    private val dataBase = MastersDB()
     private val accountBase = Firebase.auth
 
     fun getLiveData(): LiveData<AppState> {
@@ -27,7 +28,12 @@ class MastersViewModel:ViewModel() {
     fun getAllMasters(){
         liveData.postValue(AppState.Loading)
         dataBase.getAllMasters { list ->
-            liveData.postValue(AppState.ListOfMasters(list))
+            val tempList = arrayListOf<Master>()
+            for(master in list){
+                if(master.profession.name != NOT_MASTER)
+                    tempList.add(master)
+            }
+            liveData.postValue(AppState.ListOfMasters(tempList))
         }
     }
 
