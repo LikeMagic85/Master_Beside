@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/messageRecipientContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="5dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/messageRecipient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            tools:text="Hello"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/messageRecipientTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@id/messageRecipientContainer"
+        app:layout_constraintStart_toStartOf="@+id/messageRecipientContainer"
+        app:layout_constraintTop_toBottomOf="@id/messageRecipientContainer"
+        tools:text="12:00" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/messageSenderContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="?colorPrimaryVariant"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="end"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/messageSender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:padding="15dp"
+            tools:text="Hello"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/messageSenderTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="@id/messageSenderContainer"
+        app:layout_constraintStart_toStartOf="@id/messageSenderContainer"
+        app:layout_constraintTop_toBottomOf="@id/messageSenderContainer"
+        tools:text="12:00" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

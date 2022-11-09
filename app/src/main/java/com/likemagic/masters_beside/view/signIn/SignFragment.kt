@@ -1,17 +1,24 @@
 package com.likemagic.masters_beside.view.signIn
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
@@ -25,6 +32,7 @@ class SignFragment : Fragment() {
     private val binding: FragmentSignBinding
         get() = _binding!!
     private val signViewModel: SignViewModel by activityViewModels()
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -36,6 +44,20 @@ class SignFragment : Fragment() {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fade_transition)
         exitTransition = inflater.inflateTransition(R.transition.fade_transition)
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    try {
+                        val user = task.getResult(ApiException::class.java)
+                        if (user != null) {
+                            signViewModel.signInWithGoogle(user.idToken!!, user)
+                        }
+                    } catch (e: ApiException) {return@registerForActivityResult
+                    }
+                }
+            }
     }
 
     override fun onCreateView(
@@ -115,10 +137,8 @@ class SignFragment : Fragment() {
     }
 
     private fun signInWithGoogle() {
-        requireActivity().startActivityForResult(
-            getSignInClient().signInIntent,
-            SIGN_IN_WITH_GOOGLE_REQUEST_CODE
-        )
+        val intent = getSignInClient().signInIntent
+        resultLauncher.launch(intent)
     }
 
     companion object {

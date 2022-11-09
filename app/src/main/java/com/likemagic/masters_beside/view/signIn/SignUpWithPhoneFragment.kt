@@ -14,7 +14,10 @@ import androidx.transition.TransitionManager
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentSignUpWithPhoneBinding
-import com.likemagic.masters_beside.utils.*
+import com.likemagic.masters_beside.utils.SIGN_FRAGMENT
+import com.likemagic.masters_beside.utils.hideKeyboard
+import com.likemagic.masters_beside.utils.removeFragment
+import com.likemagic.masters_beside.utils.setToolbarVisibility
 import com.likemagic.masters_beside.viewModel.AppState
 import com.likemagic.masters_beside.viewModel.SignViewModel
 import kotlin.concurrent.thread

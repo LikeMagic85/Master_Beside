@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentAboutBinding
+import com.likemagic.masters_beside.notification.NotificationSender
+import com.likemagic.masters_beside.notification.PushService
+import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.utils.ABOUT_FRAGMENT
 import com.likemagic.masters_beside.utils.removeFragment
 import com.likemagic.masters_beside.utils.setToolbarVisibility
@@ -43,7 +46,7 @@ class AboutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpButtons()
-        setToolbarVisibility(requireActivity(), false)
+        setToolbarVisibility(requireActivity(), true)
     }
 
     private fun setUpButtons(){
@@ -58,7 +61,7 @@ class AboutFragment : Fragment() {
                 TODO()
             }
             license.setOnClickListener {
-                TODO()
+                // TODO:  
             }
         }
     }

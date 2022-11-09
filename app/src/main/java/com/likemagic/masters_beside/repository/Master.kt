@@ -24,5 +24,6 @@ data class Master(
     var isPhoneChecked: Boolean = false,
     var isEmailChecked:Boolean = false,
     var statusOnline:String = "",
-    var lastVisit:Long = 0
+    var lastVisit:Long = 0,
+    var fcmToken:String = ""
 ):Parcelable

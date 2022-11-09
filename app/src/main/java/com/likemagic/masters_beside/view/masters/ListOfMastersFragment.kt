@@ -236,7 +236,6 @@ class ListOfMastersFragment : Fragment(), IOnBackPressed {
             sortedList = tempList
             sortedByCostList = tempList
         }
-
     }
 
     private fun sortByCost(list:ArrayList<Master>, cost:Int){

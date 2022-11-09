@@ -18,6 +18,7 @@
         <item name="chipStyle">@style/MyChipStyle</item>
         <item name="textInputStyle">@style/MyTextEditInputStyle</item>
         <item name="switchStyle">@style/MySwitchStyle</item>
+        <item name="android:listPreferredItemHeightSmall">36dp</item>
     </style>
 
     <!--MY STYLES-->

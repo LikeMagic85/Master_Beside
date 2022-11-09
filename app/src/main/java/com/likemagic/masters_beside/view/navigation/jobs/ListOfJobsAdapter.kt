@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.dispose
 import coil.load
 import com.likemagic.masters_beside.databinding.ItemListJobBinding
-import com.likemagic.masters_beside.databinding.ItemListSearchBinding
 import com.likemagic.masters_beside.repository.Job
-import com.likemagic.masters_beside.repository.Profession
 import com.likemagic.masters_beside.utils.JobTextHelper
 
 class ListOfJobsAdapter(private var list: List<Job> = listOf()): RecyclerView.Adapter<ListOfJobsAdapter.JobsViewHolder>(){

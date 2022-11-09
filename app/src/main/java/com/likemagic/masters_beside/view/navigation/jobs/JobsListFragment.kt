@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentJobsListBinding
@@ -32,6 +33,7 @@ class JobsListFragment : Fragment() {
     private val mastersViewModel: MastersViewModel by viewModels()
     private val jobsViewModel: JobsViewModel by viewModels()
     lateinit var jobsAdapter: ListOfJobsAdapter
+    private var myData = Master()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -59,6 +61,7 @@ class JobsListFragment : Fragment() {
         setToolbarVisibility(requireActivity(), true)
         jobsAdapter = ListOfJobsAdapter()
         initRecycler()
+        setupBottomSheet()
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNav).menu.findItem(R.id.actionOrders).isChecked =
             true
         mastersViewModel.getLiveData().observe(viewLifecycleOwner){
@@ -82,14 +85,24 @@ class JobsListFragment : Fragment() {
         }
     }
 
+    private fun setupBottomSheet(){
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetJob.bottomSheetContainer)
+        binding.filterJob.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
     private fun renderData(jobState: JobState) {
         if(jobState is JobState.ListOfJobs){
             jobsAdapter.setList(jobState.list)
+            sortJobByCity(jobState.list)
+            sortByMyJob(jobState.list)
         }
     }
 
     private fun setUpMaster(appState: AppState) {
         if (appState is AppState.MyData){
+            myData = appState.master
             setUpFab(appState.master)
             jobsViewModel.getAllJobs()
         }
@@ -100,7 +113,6 @@ class JobsListFragment : Fragment() {
             if(master.isPhoneChecked){
                 createNewJobDialog(master)
             }else{
-                createNewJobDialog(master)
                 Snackbar.make(binding.root, "Необходимо подтверить номер телефона", Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -126,6 +138,42 @@ class JobsListFragment : Fragment() {
                 }
             }else{
                 view.jobName.error = "Введите название"
+            }
+        }
+    }
+
+    private fun sortJobByCity(list: List<Job>){
+        val tempList = arrayListOf<Job>()
+        tempList.addAll(list)
+        binding.bottomSheetJob.onlyInMyCitySwitch.setOnCheckedChangeListener { _, isChecked ->
+            jobsAdapter.setList(tempList)
+            if(isChecked){
+                for( i in tempList.size - 1 downTo 0){
+                    if(tempList[i].city != myData.city){
+                        tempList.removeAt(i)
+                        jobsAdapter.notifyItemRemoved(i)
+                    }
+                }
+            }else{
+                jobsAdapter.setList(list)
+            }
+        }
+    }
+
+    private fun sortByMyJob(list: List<Job>){
+        val tempList = arrayListOf<Job>()
+        tempList.addAll(list)
+        binding.bottomSheetJob.onlyMyJobSwitch.setOnCheckedChangeListener { _, isChecked ->
+            jobsAdapter.setList(tempList)
+            if(isChecked){
+                for(i in tempList.size -1 downTo 0){
+                    if(tempList[i].uid != myData.uid){
+                        tempList.removeAt(i)
+                        jobsAdapter.notifyItemRemoved(i)
+                    }
+                }
+            }else{
+                jobsAdapter.setList(list)
             }
         }
     }

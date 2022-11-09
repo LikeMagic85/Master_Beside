@@ -138,19 +138,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/menu_profile"
-        app:layout_constraintEnd_toStartOf="@id/sendMessageBtn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/jobDate" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/sendMessageBtn"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/send_message_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/toProfileBtn"
-        app:layout_constraintTop_toBottomOf="@id/jobDate" />
 
     <FrameLayout
         android:id="@+id/loadingLayout"

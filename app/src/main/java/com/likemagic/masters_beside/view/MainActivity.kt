@@ -1,9 +1,6 @@
 package com.likemagic.masters_beside.view
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -21,19 +18,18 @@ import coil.load
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ActivityMainBinding
-import com.likemagic.masters_beside.databinding.FragmentFavoriteListBinding
 import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.ListOfMastersFragment
 import com.likemagic.masters_beside.view.navigation.AboutFragment
 import com.likemagic.masters_beside.view.navigation.FavoriteListFragment
 import com.likemagic.masters_beside.view.navigation.ProfileMasterFragment
+import com.likemagic.masters_beside.view.navigation.dialogs.DialogListFragment
 import com.likemagic.masters_beside.view.navigation.jobs.JobsListFragment
 import com.likemagic.masters_beside.view.signIn.SignFragment
 import com.likemagic.masters_beside.view.signIn.SignUpWithPhoneFragment
@@ -50,7 +46,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val accountBase = FirebaseAuth.getInstance()
     private val signViewModel: SignViewModel by viewModels()
     private val mastersViewModel: MastersViewModel by viewModels()
-    private lateinit var bitmap:Bitmap
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +55,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         init()
         observeLiveData()
         setupBottomNav()
+        val name = Build.MANUFACTURER
+        Log.d("@@@", name)
     }
 
     override fun onStart() {
@@ -155,22 +152,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         mastersViewModel.getLiveData().observe(this){
-            if (it is AppState.MasterPage){
-                if (it.editState){
-                    signViewModel.uploadImage(prepareImage(bitmap), it.master)
+            when (it) {
+                is AppState.UpdateMaster -> {
+                    mastersViewModel.getMasterById(accountBase.uid!!){ result->
+                        updateNav(result)
+                    }
                 }
-            }else if ( it is AppState.UpdateMaster){
-                mastersViewModel.getMasterById(accountBase.uid!!,){result->
-                    updateNav(result)
+                is AppState.DeleteMaster -> {
+                    accountBase.currentUser?.delete()
+                    updateNavMenu(false)
+                    logOutUser()
+                    binding.mainContent.bottomNav.selectedItemId = R.id.actionHome
                 }
-            }else if (it is AppState.DeleteMaster){
-                accountBase.currentUser?.delete()
-                updateNavMenu(false)
-                logOutUser()
-                binding.mainContent.bottomNav.selectedItemId = R.id.actionHome
-            }else if (it is AppState.MyData){
-                updateNav(it.master)
-                mastersViewModel.addToOnline(it.master)
+                is AppState.MyData -> {
+                    updateNav(it.master)
+                    mastersViewModel.addToOnline(it.master)
+                }
+                else -> {}
             }
         }
     }
@@ -210,7 +208,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     true
                 }
                 R.id.actionMessage -> {
-                    // TODO:
+                    navigateTo(DialogListFragment.newInstance(), DIALOG_LIST_FRAGMENT, this)
                     true
                 }
                 R.id.actionFavorite -> {
@@ -220,7 +218,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.actionProfile -> {
                     if(accountBase.uid != null){
                         binding.mainContent.loadingLayout.visibility = VISIBLE
-                        mastersViewModel.getMasterById(accountBase.uid!!,){result->
+                        mastersViewModel.getMasterById(accountBase.uid!!){ result->
                             navigateTo(ProfileMasterFragment.newInstance(result), PROFILE_FRAGMENT, this)
                             binding.mainContent.loadingLayout.visibility = GONE
                         }
@@ -279,36 +277,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val count = supportFragmentManager.backStackEntryCount
         if (count == 1){
             (fragment as IOnBackPressed).onBackPressed()
-            return;
         }else{
             setToolbarVisibility(this, true)
             super.onBackPressed()
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SIGN_IN_WITH_GOOGLE_REQUEST_CODE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val user = task.getResult(ApiException::class.java)
-                if (user != null) {
-                    signViewModel.signInWithGoogle(user.idToken!!, user)
-                }
-            } catch (e: ApiException) {
-                Log.d("@@@", e.message!!)
-            }
-        }
-        if (resultCode == Activity.RESULT_OK && requestCode == ADD_IMAGE_REQUEST_CODE){
-            val imageView = ImageView(this)
-            imageView.setImageURI(data?.data)
-            bitmap = (imageView.drawable as BitmapDrawable).bitmap
-            if(accountBase.uid != null){
-                mastersViewModel.getMasterById(accountBase.uid!! ){
-                    mastersViewModel.getMaster(it, true)
-                }
-            }
-
-        }
-    }
 }

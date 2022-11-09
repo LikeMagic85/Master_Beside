@@ -13,7 +13,6 @@ import coil.load
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.ItemListMasterBinding
 import com.likemagic.masters_beside.repository.Master
-import com.likemagic.masters_beside.utils.NOT_MASTER
 import com.likemagic.masters_beside.utils.OnlineTextHelper
 
 class ListOfMastersAdapter(private var list: ArrayList<Master> = arrayListOf() , var myData: Master, private val context:Context): RecyclerView.Adapter<ListOfMastersAdapter.MasterViewHolder>(){

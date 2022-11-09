@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
-        android:elevation="100dp"
+        android:elevation="10dp"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
         android:padding="3dp"

@@ -12,10 +12,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.likemagic.masters_beside.R
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 const val MASTER_ID = "MASTER_ID"
-const val DB_USER = "DB_USER"
 const val DB_MASTER = "DB_MASTER"
 const val PHONE = "PHONE"
 const val ALREADY_REGISTER = "already register"
@@ -43,7 +44,6 @@ const val PROVIDER_EMAIL = "password"
 const val ABOUT_FRAGMENT = "ABOUT_FRAGMENT"
 const val PROFILE_FRAGMENT = "PROFILE_FRAGMENT"
 const val LINK_WITH_EMAIL_FRAGMENT =  "LINK_WITH_EMAIL_FRAGMENT"
-const val ADD_IMAGE_REQUEST_CODE = 102
 const val STORAGE_REQUEST_CODE = 103
 const val IMAGES = "IMAGES"
 const val REGISTER_EMAIL = "EMAIL"
@@ -53,6 +53,11 @@ const val JOBS_BRANCH = "JOBS_BRANCH"
 const val JOBS_LIST_FRAGMENT =  "JOBS_LIST_FRAGMENT"
 const val JOB_FRAGMENT =  "JOB_FRAGMENT"
 const val JOB_ID = "JOB_ID"
+const val DIALOGS_BRANCH = "DIALOGS_BRANCH"
+const val DIALOG_LIST_FRAGMENT =  "DIALOG_LIST_FRAGMENT"
+const val DIALOG_ID = "DIALOG_ID"
+const val DIALOG_FRAGMENT =  "DIALOG_FRAGMENT"
+const val SERVER_KEY_FCM = "AAAAzTVnU1Q:APA91bGNycPbmWbXlYZAUOW63V9vP2jjd3U6YsKp41H8eWNYiVf1Pu-MdVmI8dsL457TbPN79Pm6v5RU9ngDTusad_qau2Rl1SWqUMnHYc-u7AFEBw8Tov5iYhUslRNwbbuqjyKfbRO3"
 
 
 fun View.hideKeyboard() {
@@ -79,7 +84,7 @@ fun isValidPassword(password: String?) : Boolean {
 
 fun isValidPhone(phone:String?):Boolean{
     phone?.let{
-        val phonePattern = "^[\\+]?[0-9]{3}?[-\\s\\.]?[0-9]{2}[-\\s\\.]?[0-9]{7}\$"
+        val phonePattern = "^[+]?[0-9]{3}?[-\\s.]?[0-9]{2}[-\\s.]?[0-9]{7}\$"
         val phoneMatcher = Regex(phonePattern)
         return phoneMatcher.find(phone) != null
     } ?: return false
@@ -129,6 +134,12 @@ fun getRandomString(length: Int) : String {
     return (1..length)
         .map { allowedChars.random() }
         .joinToString("")
+}
+
+fun convertLongToTime(time: Long): String {
+    val date = Date(time)
+    val format = SimpleDateFormat("dd.MM HH:mm", Locale("ru"))
+    return format.format(date)
 }
 
 interface IOnBackPressed {

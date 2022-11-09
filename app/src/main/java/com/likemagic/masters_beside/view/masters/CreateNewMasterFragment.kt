@@ -2,6 +2,7 @@ package com.likemagic.masters_beside.view.masters
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentCreateNewMasterBinding
 import com.likemagic.masters_beside.repository.*
@@ -171,7 +173,6 @@ class CreateNewMasterFragment : Fragment() {
                     false
                 requireActivity().findViewById<BottomNavigationItemView>(R.id.actionProfile).isSelected =
                     true
-                removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
 
         }else(Snackbar.make(binding.root, "Выберите город из списка", Snackbar.LENGTH_SHORT)
         .show())
@@ -186,8 +187,20 @@ class CreateNewMasterFragment : Fragment() {
         about: String,
         contact: Contact,
     ) {
+        val brandName = Build.MANUFACTURER
         val master = Master(profession, city, name, about, "0", contact, 0.0, false)
-        viewModel.createNewMaster(master)
+        if(brandName != ""){
+            FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                if(it.isSuccessful){
+                    val token = it.result
+                    master.fcmToken = token
+                    viewModel.createNewMaster(master)
+                    removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
+                }
+            }
+        }else{
+            viewModel.createNewMaster(master)
+        }
     }
 
     private fun detectBackClick() {

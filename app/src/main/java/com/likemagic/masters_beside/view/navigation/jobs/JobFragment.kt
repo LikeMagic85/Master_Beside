@@ -116,14 +116,12 @@ class JobFragment : Fragment() {
                 editJobBtn.visibility = VISIBLE
                 delJobBtn.visibility = VISIBLE
                 toProfileBtn.visibility = GONE
-                sendMessageBtn.visibility = GONE
             }
         }else{
             binding.apply {
                 editJobBtn.visibility = GONE
                 delJobBtn.visibility = GONE
                 toProfileBtn.visibility = VISIBLE
-                sendMessageBtn.visibility = VISIBLE
             }
         }
     }

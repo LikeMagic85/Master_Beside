@@ -117,5 +117,9 @@
     <string name="title_job_text">Описание работы</string>
     <string name="posted_by_text">Разместил:</string>
     <string name="job_date_text">Размещена</string>
+    <string name="only_in_my_city_text">Только в моем городе</string>
+    <string name="my_job_text">Мои работы</string>
+    <string name="list_of_dialogs_title">Ваши диалоги</string>
+    <string name="dialog_text">Диалог</string>
 
 </resources>

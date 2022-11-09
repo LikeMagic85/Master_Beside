@@ -1,6 +1,5 @@
 package com.likemagic.masters_beside.database
 
-import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -9,7 +8,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.likemagic.masters_beside.repository.Job
-import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.utils.JOBS_BRANCH
 
 class JobsDB {

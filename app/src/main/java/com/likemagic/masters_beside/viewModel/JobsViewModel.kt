@@ -7,7 +7,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.likemagic.masters_beside.database.JobsDB
 import com.likemagic.masters_beside.repository.Job
-import com.likemagic.masters_beside.repository.Master
 import com.likemagic.masters_beside.utils.getRandomString
 
 class JobsViewModel: ViewModel() {

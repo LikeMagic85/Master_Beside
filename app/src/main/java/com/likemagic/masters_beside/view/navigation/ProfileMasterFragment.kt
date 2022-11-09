@@ -1,21 +1,29 @@
 package com.likemagic.masters_beside.view.navigation
 
 import android.animation.Animator
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,11 +35,10 @@ import com.likemagic.masters_beside.repository.*
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.ListOfCityAdapter
 import com.likemagic.masters_beside.view.masters.ListOfProfessionAdapter
+import com.likemagic.masters_beside.view.navigation.dialogs.DialogFragment
 import com.likemagic.masters_beside.view.signIn.LinkPhoneFragment
 import com.likemagic.masters_beside.view.signIn.SignUpWithEmailFragment
-import com.likemagic.masters_beside.viewModel.AppState
-import com.likemagic.masters_beside.viewModel.MastersViewModel
-import com.likemagic.masters_beside.viewModel.SignViewModel
+import com.likemagic.masters_beside.viewModel.*
 
 
 class ProfileMasterFragment : Fragment() {
@@ -42,14 +49,18 @@ class ProfileMasterFragment : Fragment() {
 
     private val mastersViewModel: MastersViewModel by activityViewModels()
     private val signViewModel: SignViewModel by activityViewModels()
+    private val dialogsViewModel: DialogsViewModel by viewModels()
     private val user = FirebaseAuth.getInstance().currentUser
     private var myData = Master()
+    private lateinit var resultLauncher:ActivityResultLauncher<Intent>
+    private lateinit var bitmap: Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fade_transition)
         exitTransition = inflater.inflateTransition(R.transition.fade_transition)
+        changePhoto()
     }
 
     override fun onDestroyView() {
@@ -79,6 +90,11 @@ class ProfileMasterFragment : Fragment() {
                 it.result = false
             }
         }
+        dialogsViewModel.getLiveData().observe(viewLifecycleOwner){
+            removeFragment(PROFILE_FRAGMENT, requireActivity())
+            removeFragment(JOB_FRAGMENT, requireActivity())
+            navigateToDialog((it as DialogState.DialogPage).dialog)
+        }
     }
 
     private fun makeSnackBar(isSend: Boolean) {
@@ -89,7 +105,11 @@ class ProfileMasterFragment : Fragment() {
 
     private fun initMaster(): Master? {
         val arguments = arguments
-        return arguments?.getParcelable(MASTER_ID)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(MASTER_ID, Master::class.java)
+        } else {
+            arguments?.getParcelable(MASTER_ID)
+        }
     }
 
     private fun renderData(appState: AppState) {
@@ -110,15 +130,17 @@ class ProfileMasterFragment : Fragment() {
                 showContacts(appState.showContacts, appState.master, appState.isMy)
                 confirmContacts(appState.master, appState.isMy)
                 addDeleteToFavorite(appState.master)
+                goToDialogWithMaster(appState.master)
                 if (appState.isMy) {
                     setUpEditFields(appState.master)
                     setUpSendingButton(appState.master)
-                    binding.changePhoto.setOnClickListener {
-                        openGalleryForImage()
-                    }
+                    openGalleryForImage()
                     binding.deleteAccount.setOnClickListener {
                         createRemoveDialog(appState.master)
                     }
+                }
+                if (appState.editState){
+                    signViewModel.uploadImage(prepareImage(bitmap), appState.master)
                 }
             }
             is AppState.UpdateMaster -> {
@@ -492,8 +514,8 @@ class ProfileMasterFragment : Fragment() {
         binding.contactsContainer.apply {
             notConfirmPhone.setOnClickListener {
                 val phone = binding.contactsContainer.phoneNumber.text.toString()
-                createLinkDialog(phone, master)
                 if (isValidPhone(phone)) {
+                    createLinkDialog(phone, master)
                 } else {
                     Snackbar.make(binding.root, "Неверный формат телефона", Snackbar.LENGTH_SHORT)
                         .show()
@@ -509,7 +531,24 @@ class ProfileMasterFragment : Fragment() {
         AndroidPermissionChecker(requireActivity()).checkPermissions()
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        requireActivity().startActivityForResult(intent, ADD_IMAGE_REQUEST_CODE)
+        binding.changePhoto.setOnClickListener {
+            resultLauncher.launch(intent)
+        }
+    }
+
+    private fun changePhoto() {
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    val imageView = ImageView(requireContext())
+                    imageView.setImageURI(data?.data)
+                    bitmap = (imageView.drawable as BitmapDrawable).bitmap
+                    mastersViewModel.getMasterById(user?.uid!!) {
+                        mastersViewModel.getMaster(it, true)
+                    }
+                }
+            }
     }
 
     private fun addDeleteToFavorite(master: Master){
@@ -587,6 +626,21 @@ class ProfileMasterFragment : Fragment() {
             mastersViewModel.confirmPhone(master)
             dialog.dismiss()
         }
+    }
+
+    private fun goToDialogWithMaster(master: Master){
+        val members = "${myData.uid}${master.uid}"
+        binding.sendMessageBtn.setOnClickListener {
+            dialogsViewModel.findDialog(members, myData, master)
+        }
+    }
+
+    private fun navigateToDialog(dialog:Dialog){
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(DIALOG_FRAGMENT)
+            .add(R.id.mainContainer, DialogFragment.newInstance(dialog))
+            .commit()
     }
 
     companion object {
