@@ -41,7 +41,6 @@ class CreateNewMasterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
         _binding = null
     }
 
@@ -62,6 +61,41 @@ class CreateNewMasterFragment : Fragment() {
         detectBackClick()
     }
 
+    private fun setUpUser() {
+        binding.regBtn.setOnClickListener {
+            if (binding.userChip.isChecked) {
+                binding.choseContainer.animate().scaleX(0f).scaleY(0f).setListener(object : AnimatorListener{
+                    override fun onAnimationStart(animation: Animator) {}
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.newMasterContainer.visibility = VISIBLE
+                        binding.professionHelper.visibility = GONE
+                        binding.masterProfessionContainer.visibility = GONE
+                        binding.newMasterSave.visibility = GONE
+                        binding.newUserSave.visibility = VISIBLE
+                        binding.masterAboutContainer.visibility = GONE
+                    }
+                    override fun onAnimationCancel(animation: Animator) {}
+                    override fun onAnimationRepeat(animation: Animator) {}
+                })
+            } else if (binding.masterChip.isChecked) {
+                binding.choseContainer.animate().scaleX(0f).scaleY(0f).setListener(object : AnimatorListener{
+                    override fun onAnimationStart(animation: Animator) {}
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.newMasterContainer.visibility = VISIBLE
+                        binding.professionHelper.visibility = VISIBLE
+                        binding.masterProfessionContainer.visibility = VISIBLE
+                        binding.newMasterSave.visibility = VISIBLE
+                        binding.newUserSave.visibility = GONE
+                        binding.masterAboutContainer.visibility = VISIBLE
+                    }
+                    override fun onAnimationCancel(animation: Animator) {}
+                    override fun onAnimationRepeat(animation: Animator) {}
+                })
+            } else {
+                Snackbar.make(binding.root, "Пожалуйста, сделайте выбор", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun setUpFields() {
         var profession = Profession()
@@ -142,9 +176,6 @@ class CreateNewMasterFragment : Fragment() {
             if(city in cityList ){
                 if(profession in professionList){
                     createNewMaster(profession, city,name, about, contact)
-                    requireActivity().findViewById<BottomNavigationItemView>(R.id.actionHome).isSelected = false
-                    requireActivity().findViewById<BottomNavigationItemView>(R.id.actionProfile).isSelected = true
-                    removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
                 }else(Snackbar.make(binding.root, "Выберите профессию из списка", Snackbar.LENGTH_SHORT)
                     .show())
             }else(Snackbar.make(binding.root, "Выберите город из списка", Snackbar.LENGTH_SHORT)
@@ -169,11 +200,6 @@ class CreateNewMasterFragment : Fragment() {
         } else {
             if (city in cityList) {
                 createNewMaster(profession, city, name,"", contact)
-                requireActivity().findViewById<BottomNavigationItemView>(R.id.actionHome).isSelected =
-                    false
-                requireActivity().findViewById<BottomNavigationItemView>(R.id.actionProfile).isSelected =
-                    true
-
         }else(Snackbar.make(binding.root, "Выберите город из списка", Snackbar.LENGTH_SHORT)
         .show())
     }
@@ -187,20 +213,26 @@ class CreateNewMasterFragment : Fragment() {
         about: String,
         contact: Contact,
     ) {
-        val brandName = Build.MANUFACTURER
         val master = Master(profession, city, name, about, "0", contact, 0.0, false)
-        if(brandName != ""){
-            FirebaseMessaging.getInstance().token.addOnCompleteListener {
-                if(it.isSuccessful){
-                    val token = it.result
-                    master.fcmToken = token
-                    viewModel.createNewMaster(master)
-                    removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
-                }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if(it.isSuccessful){
+                val token = it.result
+                master.fcmToken = token
+                viewModel.createNewMaster(master)
+                closeThis()
+            }else{
+                viewModel.createNewMaster(master)
+                closeThis()
             }
-        }else{
-            viewModel.createNewMaster(master)
         }
+    }
+
+    private fun closeThis() {
+        requireActivity().findViewById<BottomNavigationItemView>(R.id.actionHome).isSelected =
+            false
+        requireActivity().findViewById<BottomNavigationItemView>(R.id.actionProfile).isSelected =
+            true
+        removeFragment(CREATE_NEW_MASTER_FRAGMENT, requireActivity())
     }
 
     private fun detectBackClick() {
@@ -212,42 +244,6 @@ class CreateNewMasterFragment : Fragment() {
                     REGISTER_EMAIL)!!))
                 true
             } else false
-        }
-    }
-
-    private fun setUpUser() {
-        binding.regBtn.setOnClickListener {
-            if (binding.userChip.isChecked) {
-                binding.choseContainer.animate().scaleX(0f).scaleY(0f).setListener(object : AnimatorListener{
-                    override fun onAnimationStart(animation: Animator) {}
-                    override fun onAnimationEnd(animation: Animator) {
-                        binding.newMasterContainer.visibility = VISIBLE
-                        binding.professionHelper.visibility = GONE
-                        binding.masterProfessionContainer.visibility = GONE
-                        binding.newMasterSave.visibility = GONE
-                        binding.newUserSave.visibility = VISIBLE
-                        binding.masterAboutContainer.visibility = GONE
-                    }
-                    override fun onAnimationCancel(animation: Animator) {}
-                    override fun onAnimationRepeat(animation: Animator) {}
-                })
-            } else if (binding.masterChip.isChecked) {
-                binding.choseContainer.animate().scaleX(0f).scaleY(0f).setListener(object : AnimatorListener{
-                    override fun onAnimationStart(animation: Animator) {}
-                    override fun onAnimationEnd(animation: Animator) {
-                        binding.newMasterContainer.visibility = VISIBLE
-                        binding.professionHelper.visibility = VISIBLE
-                        binding.masterProfessionContainer.visibility = VISIBLE
-                        binding.newMasterSave.visibility = VISIBLE
-                        binding.newUserSave.visibility = GONE
-                        binding.masterAboutContainer.visibility = VISIBLE
-                    }
-                    override fun onAnimationCancel(animation: Animator) {}
-                    override fun onAnimationRepeat(animation: Animator) {}
-                })
-            } else {
-                Snackbar.make(binding.root, "Пожалуйста, сделайте выбор", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

@@ -10,6 +10,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.likemagic.masters_beside.R
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -34,7 +36,6 @@ const val CREATE_NEW_MASTER_FRAGMENT = "CREATE_NEW_MASTER_FRAGMENT"
 const val LIST_OF_MASTERS_FRAGMENT = "LIST_OF_MASTERS_FRAGMENT"
 const val RESET_PASSWORD_FRAGMENT =  "RESET_PASSWORD_FRAGMENT"
 const val LINK_PHONE_FRAGMENT =  "LINK_PHONE_FRAGMENT"
-const val SIGN_IN_WITH_GOOGLE_REQUEST_CODE = 101
 const val SUCCESS_LINK = "SUCCESS_LINK"
 const val ERROR_INVALID_VERIFICATION_CODE = "ERROR_INVALID_VERIFICATION_CODE"
 const val ERROR_CREDENTIAL_ALREADY_IN_USE = "ERROR_CREDENTIAL_ALREADY_IN_USE"
@@ -44,6 +45,7 @@ const val PROVIDER_EMAIL = "password"
 const val ABOUT_FRAGMENT = "ABOUT_FRAGMENT"
 const val PROFILE_FRAGMENT = "PROFILE_FRAGMENT"
 const val LINK_WITH_EMAIL_FRAGMENT =  "LINK_WITH_EMAIL_FRAGMENT"
+const val LIST_OF_REVIEWS_FRAGMENT =  "LIST_OF_REVIEWS_FRAGMENT"
 const val STORAGE_REQUEST_CODE = 103
 const val IMAGES = "IMAGES"
 const val REGISTER_EMAIL = "EMAIL"
@@ -53,6 +55,7 @@ const val JOBS_BRANCH = "JOBS_BRANCH"
 const val JOBS_LIST_FRAGMENT =  "JOBS_LIST_FRAGMENT"
 const val JOB_FRAGMENT =  "JOB_FRAGMENT"
 const val JOB_ID = "JOB_ID"
+const val MASTER_REV = "MASTER_REV"
 const val DIALOGS_BRANCH = "DIALOGS_BRANCH"
 const val DIALOG_LIST_FRAGMENT =  "DIALOG_LIST_FRAGMENT"
 const val DIALOG_ID = "DIALOG_ID"

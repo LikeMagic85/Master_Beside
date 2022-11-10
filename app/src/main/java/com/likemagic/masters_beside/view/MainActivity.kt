@@ -1,8 +1,6 @@
 package com.likemagic.masters_beside.view
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View.*
 import android.widget.ImageView
@@ -55,8 +53,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         init()
         observeLiveData()
         setupBottomNav()
-        val name = Build.MANUFACTURER
-        Log.d("@@@", name)
     }
 
     override fun onStart() {

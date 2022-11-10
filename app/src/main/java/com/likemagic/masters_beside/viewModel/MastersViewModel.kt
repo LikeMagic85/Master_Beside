@@ -20,6 +20,7 @@ class MastersViewModel:ViewModel() {
     }
 
     fun getMyData(){
+        liveData.postValue(AppState.Loading)
         dataBase.getMyData(){
             liveData.postValue(AppState.MyData(it))
         }
@@ -93,6 +94,7 @@ class MastersViewModel:ViewModel() {
     }
 
     fun updateMaster(master:Master, isNeed:Boolean){
+        liveData.postValue(AppState.Loading)
         dataBase.updateMaster(master) { liveData.postValue(AppState.UpdateMaster(it, isNeed)) }
     }
 
@@ -118,6 +120,13 @@ class MastersViewModel:ViewModel() {
             }else{
                 liveData.postValue(AppState.ListOfFavoriteMasters(list))
             }
+        }
+    }
+
+    fun addReview(master: Master){
+        liveData.postValue(AppState.Loading)
+        dataBase.addReview(master){
+            liveData.postValue(AppState.UpdateMaster(it,false))
         }
     }
 

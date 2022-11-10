@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Review(val owner: Master, val rating: Int, val text:String):Parcelable
+data class Review(val ownerName: String = "", val ownerPhoto:String = "", val rating: Int = 1, val text:String = ""):Parcelable

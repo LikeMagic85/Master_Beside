@@ -107,6 +107,13 @@ class MastersDB {
         updateMaster(master){  }
     }
 
+    fun addReview(master:Master, updateCallBack: UpdateCallBack){
+        if (accountBase.uid != null) masterBranch.child(master.key ?: "empty")
+            .child(master.uid!!).child("master").setValue(master).addOnCompleteListener {
+                updateCallBack.updateData(master)
+            }
+    }
+
     fun getFavoriteMasters(master: Master, readFavoriteCallBack: ReadFavoriteCallBack) {
         val tempList = ArrayList<Master>()
         if(master.favorite.isEmpty()){

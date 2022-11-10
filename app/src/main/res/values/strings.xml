@@ -121,5 +121,10 @@
     <string name="my_job_text">Мои работы</string>
     <string name="list_of_dialogs_title">Ваши диалоги</string>
     <string name="dialog_text">Диалог</string>
+    <string name="empty_list_reviews">Отзывов еще нет</string>
+    <string name="add_reviews_text">Добавить отзыв</string>
+    <string name="new_review_text">Новый отзыв</string>
+    <string name="your_review_text">Ваш отзыв</string>
+    <string name="your_grade_text">Ваша оценка</string>
 
 </resources>

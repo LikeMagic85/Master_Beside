@@ -27,6 +27,7 @@ import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.likemagic.masters_beside.R
@@ -35,6 +36,7 @@ import com.likemagic.masters_beside.repository.*
 import com.likemagic.masters_beside.utils.*
 import com.likemagic.masters_beside.view.masters.ListOfCityAdapter
 import com.likemagic.masters_beside.view.masters.ListOfProfessionAdapter
+import com.likemagic.masters_beside.view.masters.ListOfReviewsFragment
 import com.likemagic.masters_beside.view.navigation.dialogs.DialogFragment
 import com.likemagic.masters_beside.view.signIn.LinkPhoneFragment
 import com.likemagic.masters_beside.view.signIn.SignUpWithEmailFragment
@@ -95,6 +97,7 @@ class ProfileMasterFragment : Fragment() {
             removeFragment(JOB_FRAGMENT, requireActivity())
             navigateToDialog((it as DialogState.DialogPage).dialog)
         }
+        showPay()
     }
 
     private fun makeSnackBar(isSend: Boolean) {
@@ -131,6 +134,7 @@ class ProfileMasterFragment : Fragment() {
                 confirmContacts(appState.master, appState.isMy)
                 addDeleteToFavorite(appState.master)
                 goToDialogWithMaster(appState.master)
+                goToReviews(appState.master)
                 if (appState.isMy) {
                     setUpEditFields(appState.master)
                     setUpSendingButton(appState.master)
@@ -213,9 +217,8 @@ class ProfileMasterFragment : Fragment() {
                 aboutTitle.visibility = GONE
                 costTitle.visibility = GONE
                 costText.visibility = GONE
-                reviewsTitle.visibility = GONE
-                reviewsRecycler.visibility = GONE
                 inFavBtn.visibility = GONE
+                reviewsBtn.visibility = GONE
             }
         }
     }
@@ -641,6 +644,22 @@ class ProfileMasterFragment : Fragment() {
             .addToBackStack(DIALOG_FRAGMENT)
             .add(R.id.mainContainer, DialogFragment.newInstance(dialog))
             .commit()
+    }
+
+    private fun showPay(){
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.reviewsBottomSheet.bottomSheetContainer)
+        binding.reviewsBottomSheet.closeBtn.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun goToReviews(master: Master){
+        binding.reviewsBtn.setOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction().addToBackStack(LIST_OF_REVIEWS_FRAGMENT)
+                .add(R.id.mainContainer, ListOfReviewsFragment.newInstance(master))
+                .commit()
+        }
     }
 
     companion object {

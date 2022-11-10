@@ -4,12 +4,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.likemagic.masters_beside.R
 import com.likemagic.masters_beside.databinding.FragmentListOfDialogsBinding
 import com.likemagic.masters_beside.repository.Dialog
@@ -60,13 +63,30 @@ class DialogListFragment : Fragment() {
             true
         dialogAdapter = ListOfDialogsAdapter(myData = Master(), context = requireContext())
         initRecycler(dialogAdapter)
-        mastersViewModel.getLiveData().observe(viewLifecycleOwner){
-            dialogAdapter.myData = (it as AppState.MyData).master
-            dialogsViewModel.getMyDialogs((it).master.uid!!)
-        }
         mastersViewModel.getMyData()
+        mastersViewModel.getLiveData().observe(viewLifecycleOwner){
+            getMyData(it)
+        }
         dialogsViewModel.getLiveData().observe(viewLifecycleOwner){
             renderData(it)
+        }
+    }
+
+    private fun getMyData(it: AppState?) {
+        when (it) {
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = VISIBLE
+            }
+            is AppState.MyData -> {
+                dialogAdapter.myData = it.master
+                if(it.master.uid != null){
+                    dialogsViewModel.getMyDialogs(it.master.uid!!)
+                }else{
+                    binding.loadingLayout.visibility = GONE
+                    Snackbar.make(binding.root, "Необходима регистрация", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            else -> {}
         }
     }
 
@@ -88,10 +108,10 @@ class DialogListFragment : Fragment() {
     private fun renderData(dialogState: DialogState) {
         when(dialogState){
             is DialogState.Loading->{
-                binding.loadingLayout.visibility = View.VISIBLE
+                binding.loadingLayout.visibility = VISIBLE
             }
             is DialogState.ListOfDialogs -> {
-                binding.loadingLayout.visibility = View.GONE
+                binding.loadingLayout.visibility = GONE
                 dialogAdapter.setList(dialogState.list)
             }
             else -> {}
